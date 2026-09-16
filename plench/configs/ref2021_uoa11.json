@@ -1,0 +1,23 @@
+{
+  "dataset": "REF2021UOA11",
+  "data_dir": "plench/data/ref2021_uoa11",
+  "algorithm": "PM",
+  "batchsize": 8,
+  "bagsize": 64,
+  "train_instance_sample_size": null,
+  "natural_bags": true,
+  "variable_bag_size": true,
+  "uoa": 11,
+  "feature_encoder": "sentence-transformers/all-MiniLM-L6-v2",
+  "feature_cache": true,
+  "split_seed": 42,
+  "n_classes": 5,
+  "bag_build": "random",
+  "holdout_fraction": 0.0,
+  "hparams": "{\"model\": \"MLP\", \"lr\": 0.001, \"weight_decay\": 0.0001}",
+  "epochs": 100,
+  "checkpoint_freq": 10,
+  "seed": 42,
+  "num_workers": 0,
+  "output_dir": "plench/outputs/ref2021_uoa11/pm_seed42"
+}

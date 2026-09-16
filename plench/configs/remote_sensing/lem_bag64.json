@@ -1,0 +1,13 @@
+{
+  "dataset": "LEM",
+  "data_dir": "/path/to/LLP-MM/plench/data/lem",
+  "algorithm": "LLP_PVC",
+  "bagsize": 64,
+  "batchsize": 2,
+  "instances_per_epoch": 200000,
+  "epochs": 100,
+  "checkpoint_freq": 1000,
+  "seed": 0,
+  "num_workers": 4,
+  "output_dir": "/path/to/LLP-MM/plench/outputs/paper_lem_bag64"
+}

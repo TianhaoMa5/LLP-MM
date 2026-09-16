@@ -1,0 +1,20 @@
+{
+  "dataset": "AmazonWILDS",
+  "data_dir": "plench/data/amazon_wilds",
+  "algorithm": "PM",
+  "batchsize": 8,
+  "num_reviewers": null,
+  "natural_bags": true,
+  "variable_bag_size": true,
+  "feature_encoder": "sentence-transformers/all-MiniLM-L6-v2",
+  "feature_cache": true,
+  "n_classes": 5,
+  "bag_build": "random",
+  "holdout_fraction": 0.0,
+  "hparams": "{\"model\": \"MLP\", \"lr\": 0.001, \"weight_decay\": 0.0001}",
+  "epochs": 100,
+  "checkpoint_freq": 10,
+  "seed": 42,
+  "num_workers": 0,
+  "output_dir": "plench/outputs/amazon_wilds/pm_seed42"
+}

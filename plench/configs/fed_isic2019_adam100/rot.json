@@ -1,0 +1,23 @@
+{
+  "dataset": "FedISIC2019",
+  "data_root": "plench/data/fed_isic2019",
+  "batchsize": 512,
+  "target_avg_bag_size": 64,
+  "min_bag_size": 16,
+  "max_bag_size": 128,
+  "natural_bags": false,
+  "variable_bag_size": true,
+  "feature_cache": true,
+  "feature_encoder": "dinov2_vits14",
+  "n_classes": 8,
+  "bag_build": "feature",
+  "holdout_fraction": 0,
+  "epochs": 100,
+  "checkpoint_freq": 100,
+  "seed": 0,
+  "num_workers": 4,
+  "forward_chunk_size": 32,
+  "algorithm": "ROT",
+  "hparams": "{\"model\":\"ImageNetResNet18\",\"pretrained\":true,\"input_resolution\":224,\"batch_size\":512,\"optimizer\":\"Adam\",\"lr\":0.001,\"weight_decay\":0.0005,\"alpha\":0.6,\"sinkhorn_iterations\":3}",
+  "output_dir": "plench/outputs/fed_isic2019/adam100/rot_resnet18_imagenet_224_seed0"
+}

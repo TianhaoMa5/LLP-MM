@@ -1,0 +1,16 @@
+{
+  "dataset": "TwitterEthnicity2017",
+  "data_dir": "data/twitter_ethnicity_2017",
+  "algorithm": "PM",
+  "bagsize": 64,
+  "batchsize": 1,
+  "n_classes": 3,
+  "bag_build": "random",
+  "holdout_fraction": 0.0,
+  "hparams": "{\"model\": \"MLP\", \"lr\": 0.001, \"weight_decay\": 0.0001}",
+  "epochs": 100,
+  "checkpoint_freq": 100,
+  "seed": 0,
+  "num_workers": 0,
+  "output_dir": "outputs/twitter_ethnicity_2017/race3_xception_bs64"
+}

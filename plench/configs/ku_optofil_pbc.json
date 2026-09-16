@@ -1,0 +1,20 @@
+{
+  "dataset": "KUOptofilPBC",
+  "data_dir": "plench/data/ku_optofil_pbc",
+  "algorithm": "PM",
+  "batchsize": 1,
+  "bagsize": 32,
+  "train_instance_sample_size": null,
+  "natural_bags": true,
+  "variable_bag_size": true,
+  "n_classes": 13,
+  "bag_build": "random",
+  "holdout_fraction": 0.0,
+  "hparams": "{\"model\": \"ResNet\", \"lr\": 0.001, \"weight_decay\": 0.0}",
+  "epochs": 200,
+  "checkpoint_freq": 10,
+  "seed": 42,
+  "num_workers": 4,
+  "forward_chunk_size": 32,
+  "output_dir": "plench/outputs/ku_optofil_pbc/pm_resnet18_seed42"
+}
