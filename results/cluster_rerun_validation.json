@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-06",
+  "code_commit": "7a27dfd",
+  "status": "corrected_cluster_launch_not_completed_reproduction",
+  "tests": {
+    "command": ".venv/bin/python -m pytest -q",
+    "passed": 281,
+    "skipped": 2,
+    "failed": 0,
+    "seconds": 8.31
+  },
+  "gpu_smoke_verified": {
+    "wisteria": [
+      "CIFAR10 LLP-MM paper_image",
+      "CIFAR100 LLP-MM paper_image"
+    ],
+    "miyabi": [
+      "miniImageNet LLP-MM paper_image"
+    ],
+    "kserver": [
+      "CIFAR10 PM",
+      "CIFAR10 DSQ",
+      "CIFAR10 LLP-PVC",
+      "CIFAR10 LLP-FC",
+      "CIFAR10 ROT",
+      "CIFAR10 EasyLLP",
+      "CIFAR10 EasyLLP-ABS",
+      "CIFAR10 GeneralUPM",
+      "CIFAR10 GeneralUPM-ABS"
+    ]
+  },
+  "formal_run_count": 396,
+  "formal_results_complete": false,
+  "notes": [
+    "Frozen bag manifests verify original source identities and proportions across environments.",
+    "This incremental report does not replace the older release_validation.json wheel build or source inventory.",
+    "Long-running training completion must be checked independently."
+  ]
+}
