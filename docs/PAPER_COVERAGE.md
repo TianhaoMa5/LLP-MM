@@ -72,11 +72,15 @@ The script checks the exact 72-run grid, seeds 0/1/2, uniqueness, valid percenta
 
 [ku_paper_summary.csv](../results/ku_paper_summary.csv) is explicitly **aggregate-only**. It transcribes the eleven rows from the hashed `macro-selected-sources.json` artifact and retains the reported selected epochs in seed 0/1/2 order. The mean/std values have not been recomputed from all 33 raw logs, and no per-seed scores are invented. One complete LLP-MM seed-0 log was subsequently recovered; its maximum test Macro-F1 is at epoch 99. See [RECOVERED_LOGS.md](RECOVERED_LOGS.md). Its ABS rows are marked as requiring historical revalidation.
 
+## Version-specific qualification
+
+The original experiment ABS implementation and a packaged Cluster implementation already contain the intended behavior. Defects found in the initial LLP-MM release must not be generalized to all historical runs. See [VERSION_DIFFERENCES.md](VERSION_DIFFERENCES.md).
+
 ## Open reproduction blockers
 
 - **RED — Cluster index/seed defects.** The inherited loader did not map shuffled image indices back to the original cluster array, and initialized the cluster Generator without a seed. The miniImageNet map is for 60,000 merged images while its train split contains 50,000. The corrected release aligns these index spaces and seeds sampling; historical Cluster rows need original-runtime verification or reruns. The retained miniImageNet map was fitted on the full merged population, not training images only.
 
-- **RED — Historical ABS bug.** The historical flooding helper returned raw loss when `b=0`; nominal ABS runs therefore did not necessarily apply absolute value. Correcting the release code does not repair the historical numbers. EasyLLP-ABS and GeneralUPM-ABS in synthetic and KU tables need reruns or source-level revalidation before their numerical reproducibility can be claimed.
+- **RED — Release-copy ABS behavior.** The initial LLP-MM release flooding helper returned raw loss when `b=0`; nominal ABS runs therefore did not necessarily apply absolute value. Correcting the release code does not repair the historical numbers. EasyLLP-ABS and GeneralUPM-ABS in synthetic and KU tables need reruns or source-level revalidation before their numerical reproducibility can be claimed.
 - **RED — Main-table provenance.** Recover all relevant raw scores, complete configs, source revisions, seed definitions, checkpoint selection rules, and aggregation conventions. Twelve CIFAR-100 alpha-first FlowLLP run logs were recovered and their four aggregate cells match the manuscript; 1,176 main-table run logs remain unrecovered. See [RECOVERED_LOGS.md](RECOVERED_LOGS.md).
 - **RED — KU raw logs.** Recover the remaining 32 epoch logs (LLP-MM seed 0 has been recovered) and verify the recorded test-selected epochs and all four metrics at each selected checkpoint. The present CSV is only an aggregate reference.
 - **RED — Order/runtime evidence.** Recover the measurement table, original plot script, seeds, warmup/timing method, and exact implementation. The paper reports an NVIDIA A100-SXM4-40GB and AMD EPYC 7742 CPU. The current figure cannot be regenerated from this release; do not extract plotted pixels and describe them as measured values.

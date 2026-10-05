@@ -129,3 +129,5 @@ completed paper experiments.
 provenance. This candidate does not assign a blanket license to inherited code.
 
 Additional source recovery: [RECOVERED_LOGS.md](docs/RECOVERED_LOGS.md) records 12/1,188 main-table run logs and 1/33 KU logs, with source hashes and independently checked aggregates.
+
+Version clarification: the original experiment ABS helper and an existing packaged Cluster loader already implement the intended behavior. The corrections above apply to the inspected release copy; historical-run impact must be checked against actual runtime sources. See [VERSION_DIFFERENCES.md](docs/VERSION_DIFFERENCES.md).
