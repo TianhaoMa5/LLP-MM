@@ -1,6 +1,6 @@
 {
   "dataset": "KUOptofilPBC",
-  "data_dir": "plench/data/ku_optofil_pbc",
+  "data_dir": "data/ku_optofil_pbc",
   "algorithm": "PM",
   "batchsize": 1,
   "bagsize": 32,
@@ -16,5 +16,5 @@
   "seed": 42,
   "num_workers": 4,
   "forward_chunk_size": 32,
-  "output_dir": "plench/outputs/ku_optofil_pbc/pm_resnet18_seed42"
+  "output_dir": "outputs/ku_optofil_pbc/pm_resnet18_seed42"
 }

@@ -1,0 +1,85 @@
+{
+  "source": "Rethinking Learning from Label Proportions via Moment Matching, Appendix G",
+  "datasets": {
+    "CIFAR10": {
+      "backbone": "resnet18",
+      "modified_stem": true,
+      "num_classes": 10
+    },
+    "CIFAR100": {
+      "backbone": "resnet18",
+      "modified_stem": true,
+      "num_classes": 100
+    },
+    "miniImageNet": {
+      "backbone": "resnet34",
+      "modified_stem": true,
+      "num_classes": 100
+    }
+  },
+  "bag_construction": {
+    "modes": [
+      "random",
+      "cluster",
+      "alphafirst"
+    ],
+    "bag_sizes": [
+      16,
+      32,
+      64,
+      128
+    ],
+    "without_replacement": true,
+    "cluster_alpha": 1.0,
+    "alphafirst_alpha": 10.0,
+    "cluster_count_cifar10": 32,
+    "cluster_map_cifar10_sha256": "229200039530f9a732503677a475c858eb0d4ebd1a080dcff089f399595621bf"
+  },
+  "training": {
+    "epochs": 500,
+    "samples_per_iteration": 1024,
+    "augmentation": "standard",
+    "optimizer": "SGD",
+    "learning_rate": 0.05,
+    "momentum": 0.9,
+    "weight_decay": 0.0005,
+    "scheduler": "linear_warmup_cosine",
+    "warmup_fraction": 0.08
+  },
+  "evaluation": {
+    "metric": "accuracy",
+    "trials": 3,
+    "trial_seeds": [
+      0,
+      1,
+      2
+    ],
+    "report": "mean_and_standard_deviation"
+  },
+  "provenance": {
+    "paper_explicit": [
+      "datasets",
+      "backbones",
+      "modified_stem",
+      "bag_modes",
+      "bag_sizes",
+      "epochs",
+      "samples_per_iteration",
+      "augmentation",
+      "optimizer",
+      "learning_rate",
+      "momentum",
+      "weight_decay",
+      "scheduler"
+    ],
+    "inherited_from_existing_plench_code": [
+      "cluster_alpha",
+      "alphafirst_alpha",
+      "cluster_count_cifar10",
+      "cluster_map_cifar10_sha256",
+      "warmup_fraction",
+      "trials",
+      "trial_seeds"
+    ]
+  }
+}

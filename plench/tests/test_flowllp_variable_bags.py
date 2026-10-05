@@ -267,3 +267,54 @@ def test_flowllp_rejects_padding_and_inconsistent_membership() -> None:
             torch.tensor([2, 3]),
             torch.tensor([0, 0, 0, 1, 1]),
         )
+
+
+def _flow_with_optimizer_hparams(**overrides):
+    hparams = {
+        "model": "Linear", "lr": 0.05,
+        "flow_latent_dim": 2, "flow_anchors_per_class": 1,
+        "steps_per_epoch": 10,
+    }
+    hparams.update(overrides)
+    return LLP_FlowLLP(1000, (8, 4), [[0.5, 0.5]], hparams, 4)
+
+
+def test_flowllp_implicit_legacy_optimizer_and_schedule_are_preserved():
+    algorithm = _flow_with_optimizer_hparams()
+    assert isinstance(algorithm.optimizer, torch.optim.SGD)
+    assert algorithm.optimizer.defaults["momentum"] == pytest.approx(0.9)
+    assert algorithm.optimizer.defaults["nesterov"] is True
+    assert algorithm.optimizer.defaults["weight_decay"] == pytest.approx(5e-4)
+    assert algorithm.scheduler.warmup_iter == 80
+    assert algorithm.scheduler.warmup_ratio == pytest.approx(5e-5 / 0.05)
+    assert algorithm.scheduler.warmup == "linear"
+    assert algorithm.scheduler.cosine_mode == "legacy_quarter"
+
+
+def test_flowllp_explicit_adam_and_five_epoch_warmup_are_respected():
+    algorithm = _flow_with_optimizer_hparams(
+        optimizer="Adam", lr=0.001, weight_decay=0.0005,
+        warmup_fraction=0.05, warmup_ratio=0.1,
+        warmup="linear", cosine_mode="standard",
+    )
+    assert isinstance(algorithm.optimizer, torch.optim.Adam)
+    assert algorithm.optimizer.defaults["lr"] == pytest.approx(0.001)
+    assert algorithm.optimizer.defaults["weight_decay"] == pytest.approx(0.0005)
+    assert algorithm.scheduler.warmup_iter == 5 * algorithm.flow_steps_per_epoch
+    assert algorithm.scheduler.warmup_ratio == pytest.approx(0.1)
+    assert algorithm.scheduler.warmup == "linear"
+    assert algorithm.scheduler.cosine_mode == "standard"
+    optimized = {id(parameter) for group in algorithm.optimizer.param_groups for parameter in group["params"]}
+    assert optimized == {id(parameter) for parameter in algorithm.network.parameters()}
+
+
+def test_flowllp_explicit_sgd_momentum_and_exponential_warmup_are_respected():
+    algorithm = _flow_with_optimizer_hparams(
+        optimizer="SGD", momentum=0.5, nesterov=False,
+        warmup_fraction=0.03, warmup_ratio=0.01, warmup="exp",
+    )
+    assert algorithm.optimizer.defaults["momentum"] == pytest.approx(0.5)
+    assert algorithm.optimizer.defaults["nesterov"] is False
+    assert algorithm.scheduler.warmup_iter == 30
+    assert algorithm.scheduler.warmup_ratio == pytest.approx(0.01)
+    assert algorithm.scheduler.warmup == "exp"

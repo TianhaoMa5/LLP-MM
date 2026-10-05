@@ -1,0 +1,23 @@
+{
+  "dataset": "KUOptofilPBC",
+  "data_dir": "data/ku_optofil_pbc",
+  "algorithm": "LLP_MM",
+  "batchsize": 4,
+  "bagsize": 32,
+  "train_instance_sample_size": null,
+  "ku_merge_validation_into_train": true,
+  "ku_unknown_bag_max_size": 128,
+  "ku_unknown_bag_seed": 0,
+  "natural_bags": false,
+  "variable_bag_size": true,
+  "n_classes": 13,
+  "bag_build": "random",
+  "holdout_fraction": 0.0,
+  "hparams": "{\"model\":\"ImageNetResNet18\",\"pretrained\":true,\"optimizer\":\"Adam\",\"lr\":0.001,\"weight_decay\":0.0005,\"warmup_fraction\":0.05,\"warmup_ratio\":0.1,\"warmup\":\"linear\",\"cosine_mode\":\"standard\",\"order\":7,\"moment_loss_type\":\"ce\",\"moment_algorithm\":\"stable_dp\",\"moment_compute_dtype\":\"float64\",\"moment_ce_smoothing_tau\":0.0001,\"order_weights\":[0.14285714285714285,0.14285714285714285,0.14285714285714285,0.14285714285714285,0.14285714285714285,0.14285714285714285,0.14285714285714285],\"alpha\":0.6,\"sinkhorn_iterations\":3,\"ku_activation_checkpoint\":true,\"ku_select_by_validation_macro_f1\":false,\"ku_test_every_checkpoint\":true}",
+  "epochs": 200,
+  "checkpoint_freq": 62,
+  "seed": 0,
+  "num_workers": 4,
+  "forward_chunk_size": 32,
+  "output_dir": "outputs/ku_optofil_pbc/unknown128_imagenet_adam200_seed0/MM7"
+}

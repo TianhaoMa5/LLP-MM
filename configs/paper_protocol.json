@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "protocol_id": "image-main-tables-reconstructed-v1",
+  "verification_status": "reconstructed_unverified",
+  "description": "Executable reconstruction of the three synthetic image benchmark tables; not a certification of exact historical numerical reproduction.",
+  "datasets": {
+    "CIFAR10": {
+      "num_classes": 10,
+      "model": "ResNet",
+      "moment_order": 8
+    },
+    "CIFAR100": {
+      "num_classes": 100,
+      "model": "ResNet",
+      "moment_order": 3
+    },
+    "miniImageNet": {
+      "num_classes": 100,
+      "model": "ResNet_miniImageNet",
+      "moment_order": 3
+    }
+  },
+  "bag_modes": {
+    "random": 1.0,
+    "cluster": 1.0,
+    "alphafirst": 10.0
+  },
+  "bag_sizes": [
+    16,
+    32,
+    64,
+    128
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "methods": {
+    "PM": {
+      "algorithm": "PM"
+    },
+    "DSQ": {
+      "algorithm": "LLP_DSQ"
+    },
+    "LLP-PVC": {
+      "algorithm": "LLP_PVC",
+      "hparams": {
+        "lr": 0.005
+      }
+    },
+    "LLP-FC": {
+      "algorithm": "LLP_FC"
+    },
+    "ROT": {
+      "algorithm": "ROT",
+      "hparams": {
+        "alpha": 0.6,
+        "sinkhorn_iterations": 3
+      }
+    },
+    "EasyLLP": {
+      "algorithm": "EasyLLP",
+      "hparams": {
+        "loss_type": "ce",
+        "flooding": false,
+        "flooding_b": 0.0
+      }
+    },
+    "EasyLLP-ABS": {
+      "algorithm": "EasyLLP",
+      "hparams": {
+        "loss_type": "ce",
+        "flooding": true,
+        "flooding_b": 0.0
+      }
+    },
+    "GeneralUPM": {
+      "algorithm": "GeneralUPM",
+      "hparams": {
+        "flooding": false,
+        "flooding_b": 0.0
+      }
+    },
+    "GeneralUPM-ABS": {
+      "algorithm": "GeneralUPM",
+      "hparams": {
+        "flooding": true,
+        "flooding_b": 0.0
+      }
+    },
+    "FlowLLP": {
+      "algorithm": "LLP_FlowLLP",
+      "hparams": {
+        "nesterov": true,
+        "warmup_ratio": 0.001,
+        "flow_latent_dim": 50,
+        "flow_pretrain_fraction": 0.5,
+        "flow_anchors_per_class": 1000,
+        "flow_particle_steps": 3000,
+        "flow_particle_lr": 0.001,
+        "flow_anchor_bag_batch": 1,
+        "flow_lambda_bag": 1.0,
+        "flow_lambda_anchor": 0.1,
+        "flow_reg_label": 0.0,
+        "flow_reg_bag_classifier": 1.0,
+        "flow_anchor_batch_size": 128
+      }
+    },
+    "LLP-MM": {
+      "algorithm": "LLP_MM",
+      "hparams": {
+        "moment_loss_type": "ce",
+        "moment_algorithm": "stable_dp",
+        "moment_compute_dtype": "float64",
+        "moment_ce_smoothing_tau": 0.0001
+      }
+    }
+  },
+  "training": {
+    "epochs": 500,
+    "samples_per_step": 1024,
+    "checkpoint_freq": 1000,
+    "hparams": {
+      "optimizer": "SGD",
+      "lr": 0.05,
+      "momentum": 0.9,
+      "weight_decay": 0.0005,
+      "nesterov": false,
+      "warmup_fraction": 0.08,
+      "warmup_ratio": 0.0005,
+      "warmup": "linear",
+      "cosine_mode": "legacy_quarter"
+    }
+  },
+  "provenance": {
+    "manuscript_parameters": [
+      "datasets",
+      "backbones with modified stem",
+      "bag modes and sizes",
+      "epochs=500",
+      "samples_per_step=1024",
+      "optimizer=SGD",
+      "momentum=0.9",
+      "weight_decay=0.0005",
+      "lr=0.005 for LLP-PVC and 0.05 otherwise",
+      "LLP-MM orders and equal order weights"
+    ],
+    "inherited_implementation_parameters": [
+      "warmup_fraction=0.08 is inherited, not explicitly stated in the manuscript",
+      "legacy_quarter cosine convention and warmup starting ratios",
+      "Nesterov disabled except for FlowLLP",
+      "seeds 0/1/2",
+      "checkpoint_freq=1000",
+      "ROT and FlowLLP method hyperparameters",
+      "Dirichlet pi=10 for alphafirst and pi=1 for cluster"
+    ],
+    "known_limitations": [
+      "The original complete per-seed raw results and source revisions have not been recovered and linked for every table cell.",
+      "Historical bag assignments and shared manifest checksums have not been validated across all methods. Current deterministic loaders construct bags from the selected seed.",
+      "The legacy base optimizer default is Adam. This reconstruction explicitly requests SGD to match the manuscript; it does not certify the optimizer used by every historical run.",
+      "The historical EasyLLP/GeneralUPM flooding helper returned the raw loss at b=0. The corrected release applies abs(loss) when flooding is enabled; historical ABS rows require new numerical validation.",
+      "FlowLLP builds its own SGD optimizer and scheduler with Nesterov enabled, warmup_fraction=0.08 and warmup_ratio=5e-5/lr; these inherited method settings are recorded explicitly.",
+      "LLP-MM uses the current strict float64 stable-DP CE implementation with smoothing tau=1e-4; equality to every historical training revision is unverified.",
+      "Dataset-free tests validate planning and implementation behavior, not the final paper accuracies.",
+      "Cluster-bag index alignment and RNG seeding were corrected in this candidate. Historical Cluster results need new numerical verification, including miniImageNet full-population-map projection."
+    ]
+  }
+}

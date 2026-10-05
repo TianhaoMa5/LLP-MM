@@ -1,0 +1,5 @@
+dataset,method,bag_mode,bag_size,seeds,n_runs,selection,metric,unit,mean,std,ddof,paper_mean,paper_std,matches_paper_at_2dp
+CIFAR100,FlowLLP,alphafirst,16,"0,1,2",3,last_logged_checkpoint,test_accuracy,percent,70.89666666666668,0.23965252624024877,1,70.90,0.24,True
+CIFAR100,FlowLLP,alphafirst,32,"0,1,2",3,last_logged_checkpoint,test_accuracy,percent,65.84666666666666,0.4578573285788175,1,65.85,0.46,True
+CIFAR100,FlowLLP,alphafirst,64,"0,1,2",3,last_logged_checkpoint,test_accuracy,percent,50.373333333333335,1.1662475437630417,1,50.37,1.17,True
+CIFAR100,FlowLLP,alphafirst,128,"0,1,2",3,last_logged_checkpoint,test_accuracy,percent,2.7933333333333334,0.5299371031861547,1,2.79,0.53,True

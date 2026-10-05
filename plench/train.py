@@ -70,7 +70,7 @@ from .data.fed_isic2019 import (
     update_fed_isic2019_algorithm,
 )
 
-# python -m plench.train --data_dir /path/to/data/CIFAR10 --dataset CIFAR10 --algorithm LLP_PVC --batchsize 8 --bagsize 16 --steps 600000 --output_dir ./train_output --skip_model_save
+# python -m plench.train --data_dir data/CIFAR10 --dataset CIFAR10 --algorithm LLP_PVC --batchsize 8 --bagsize 16 --steps 600000 --output_dir ./train_output --skip_model_save
 
 if __name__ == "__main__":
     config_parser = argparse.ArgumentParser(add_help=False)
@@ -130,6 +130,12 @@ if __name__ == "__main__":
                         help='CCT train-fitted PCA dimension recorded by preparation')
     parser.add_argument('--train-instance-sample-size', type=int, default=None,
                         help='Natural-bag datasets: optional without-replacement training instances per complete bag; null preserves the full bag')
+    parser.add_argument('--ku-merge-validation-into-train', action='store_true',
+                        help='KU only: train on official train + validation patients and retain the official test split')
+    parser.add_argument('--ku-unknown-bag-max-size', type=int, default=None,
+                        help='KU only: split the missing-patient-ID training group into balanced sub-bags; known patients and test unchanged')
+    parser.add_argument('--ku-unknown-bag-seed', type=int, default=0,
+                        help='KU unknown-group assignment seed, independent of model seed')
     parser.add_argument('--forward-chunk-size', type=int, default=32,
                         help='KU-Optofil train/evaluation device-forward chunk size; patient bags remain complete')
     parser.add_argument('--feature-encoder', type=str, default=None,
@@ -356,6 +362,8 @@ if __name__ == "__main__":
         hparams = hparams_registry.random_hparams(args.algorithm, args.dataset, misc.seed_hash(args.hparams_seed, args.trial_seed))
     if args.hparams:
         hparams.update(json.loads(args.hparams))
+    if args.ku_merge_validation_into_train and hparams.get('ku_select_by_validation_macro_f1', False):
+        parser.error('KU train+test protocol cannot select a model using validation')
     if is_cct_dataset(args.dataset):
         cct_backbone_configs = {
             "CCTResNet18": True,
@@ -424,7 +432,26 @@ if __name__ == "__main__":
         num_reviewers=args.num_reviewers,
         cluster_seed=args.cluster_seed,
         target_avg_bag_size=args.target_avg_bag_size,
+        ku_merge_validation_into_train=args.ku_merge_validation_into_train,
+        ku_unknown_bag_max_size=args.ku_unknown_bag_max_size,
+        ku_unknown_bag_seed=args.ku_unknown_bag_seed,
     )
+    if is_ku_optofil_dataset(args.dataset) and args.ku_unknown_bag_max_size is not None:
+        assignment_manifest = {
+            'mode': 'known_patient_bags_plus_synthetic_unknown_subbags',
+            'unknown_bag_max_size': args.ku_unknown_bag_max_size,
+            'unknown_bag_seed': args.ku_unknown_bag_seed,
+            'merge_validation_into_train': args.ku_merge_validation_into_train,
+            'bags': [
+                {'bag_id': bag.bag_id, 'source_split': bag.split,
+                 'indices': bag.indices.tolist(),
+                 'class_counts': bag.class_counts.tolist(),
+                 'proportions': bag.proportions.tolist()}
+                for bag in train_loader.dataset.bags
+            ],
+        }
+        with open(os.path.join(args.output_dir, 'training_bag_assignments.json'), 'w') as handle:
+            json.dump(assignment_manifest, handle, sort_keys=True)
     if args.algorithm == "NonClipOVR":
         loader_batch_size = getattr(train_loader, "batch_size", None)
         if loader_batch_size is None:
@@ -566,6 +593,13 @@ if __name__ == "__main__":
         torch.save(save_dict, os.path.join(args.output_dir, filename))
 
     last_results_keys = None
+    ku_select_validation = is_ku_optofil_dataset(args.dataset) and bool(
+        hparams.get('ku_select_by_validation_macro_f1', False)
+    )
+    ku_completed_epoch_logging = ku_select_validation or (
+        is_ku_optofil_dataset(args.dataset) and args.ku_merge_validation_into_train
+    )
+    ku_best_validation = None
     ulb_prob_t = torch.ones((args.n_classes)).to(device) / args.n_classes
     prob_max_mu_t = 1.0 / args.n_classes
     prob_max_var_t = 1.0
@@ -642,6 +676,7 @@ if __name__ == "__main__":
                 ku_batch,
                 device,
                 forward_chunk_size=args.forward_chunk_size,
+                activation_checkpoint=bool(hparams.get('ku_activation_checkpoint', False)),
                 iteration=step,
                 softmatch_state=(
                     ulb_prob_t, prob_max_mu_t, prob_max_var_t
@@ -770,10 +805,14 @@ if __name__ == "__main__":
             checkpoint_vals[key].append(val)
 
 
-        if (step % checkpoint_freq == 0) or (step == n_steps - 1):
+        checkpoint_due = (
+            (step + 1) % checkpoint_freq == 0
+            if ku_completed_epoch_logging else step % checkpoint_freq == 0
+        )
+        if checkpoint_due or (step == n_steps - 1):
             results = {
                 'step': step,
-                'epoch': step / steps_per_epoch,
+                'epoch': (step + 1) / steps_per_epoch if ku_completed_epoch_logging else step / steps_per_epoch,
             }
 
             for key, val in checkpoint_vals.items():
@@ -798,15 +837,14 @@ if __name__ == "__main__":
                     if key not in {"per_class", "confusion_matrix"}:
                         results[f"val_{key}"] = value
             elif is_ku_optofil_dataset(args.dataset):
-                ku_val_details = evaluate_ku_optofil(
-                    algorithm,
-                    val_loader,
-                    device,
-                    forward_chunk_size=args.forward_chunk_size,
-                )
-                for key, value in ku_val_details.items():
-                    if key not in {"bag_ids", "per_class", "confusion_matrix"}:
-                        results[f"val_{key}"] = value
+                if val_loader is not None:
+                    ku_val_details = evaluate_ku_optofil(
+                        algorithm, val_loader, device,
+                        forward_chunk_size=args.forward_chunk_size,
+                    )
+                    for key, value in ku_val_details.items():
+                        if key not in {"bag_ids", "per_class", "confusion_matrix"}:
+                            results[f"val_{key}"] = value
             elif is_ref2021_dataset(args.dataset):
                 ref_val_details = evaluate_ref2021(algorithm, val_loader, device)
                 for key, value in ref_val_details.items():
@@ -877,7 +915,9 @@ if __name__ == "__main__":
                     results['test_balanced_accuracy'] = None
                     results['test_macro_f1'] = None
             elif is_ku_optofil_dataset(args.dataset):
-                if step == n_steps - 1:
+                if test_loader is not None and (
+                    step == n_steps - 1 or hparams.get('ku_test_every_checkpoint', False)
+                ):
                     ku_test_details = evaluate_ku_optofil(
                         algorithm,
                         test_loader,
@@ -887,6 +927,7 @@ if __name__ == "__main__":
                     results['test_acc'] = ku_test_details['instance_accuracy']
                     results['test_macro_f1'] = ku_test_details['macro_f1']
                     results['test_weighted_f1'] = ku_test_details['weighted_f1']
+                    results['test_balanced_accuracy'] = ku_test_details['balanced_accuracy']
                     results['test_bag_proportion_mae'] = ku_test_details['bag_proportion_mae']
                     results['test_bag_proportion_rmse'] = ku_test_details['bag_proportion_rmse']
                 else:
@@ -939,6 +980,22 @@ if __name__ == "__main__":
             if is_ku_optofil_dataset(args.dataset) and ku_test_details is not None:
                 results['test_per_class'] = ku_test_details['per_class']
                 results['test_confusion_matrix'] = ku_test_details['confusion_matrix']
+            if ku_select_validation:
+                validation_score = float(ku_val_details['macro_f1'])
+                if np.isfinite(validation_score) and (
+                    ku_best_validation is None or validation_score > ku_best_validation['val_macro_f1']
+                ):
+                    ku_best_validation = {
+                        'step': step,
+                        'epoch': results['epoch'],
+                        'val_macro_f1': validation_score,
+                        'val_instance_accuracy': ku_val_details['instance_accuracy'],
+                        'checkpoint': 'model_best_val_macro_f1.pkl',
+                    }
+                    save_checkpoint(ku_best_validation['checkpoint'])
+                    with open(os.path.join(args.output_dir, 'best_validation.json'), 'w') as handle:
+                        json.dump(ku_best_validation, handle, indent=2)
+                results['best_validation'] = dict(ku_best_validation) if ku_best_validation else None
 
             results.update({
                 'hparams': hparams,
@@ -955,6 +1012,30 @@ if __name__ == "__main__":
             if args.save_model_every_checkpoint:
                 save_checkpoint(f'model_step{step}.pkl')
 
+    if is_ku_optofil_dataset(args.dataset) and args.ku_merge_validation_into_train:
+        save_checkpoint('model_final.pkl')
+        with open(os.path.join(args.output_dir, 'final_test.json'), 'w') as handle:
+            json.dump({
+                'selection': 'final_epoch', 'epoch': n_epochs,
+                'test': ku_test_details, 'hparams': hparams, 'args': vars(args),
+                'split_protocol': 'official_train_plus_validation_vs_official_test',
+            }, handle, indent=2, cls=misc.NpEncoder)
+    if ku_select_validation and ku_best_validation is not None:
+        save_checkpoint('model_final.pkl')
+        best_path = os.path.join(args.output_dir, ku_best_validation['checkpoint'])
+        saved = torch.load(best_path, map_location=device, weights_only=False)
+        algorithm.load_state_dict(saved['model_dict'])
+        selected = {
+            'selection': 'validation_macro_f1',
+            'best_validation': ku_best_validation,
+            'test': evaluate_ku_optofil(
+                algorithm, test_loader, device, forward_chunk_size=args.forward_chunk_size
+            ) if test_loader is not None else None,
+            'hparams': hparams,
+            'args': vars(args),
+        }
+        with open(os.path.join(args.output_dir, 'selected_test.json'), 'w') as handle:
+            json.dump(selected, handle, indent=2, cls=misc.NpEncoder)
     # save_checkpoint('model.pkl')
     with open(os.path.join(args.output_dir, 'done'), 'w') as f:
         f.write('done')

@@ -1,5 +1,6 @@
 import os.path as osp
 import pickle
+import json
 import scipy.io as sio
 
 import torch
@@ -405,7 +406,58 @@ class ThreeCropsTransform:
         return [x1, x2, x3]
 
 
-def load_data_train(pi,bag_build,num_classes, holdout_fraction, dataset="CIFAR10", dspth="./data", bagsize=16, backbone=None):
+def _cluster_ids_for_training_samples(
+    clusters, *, dataset, dataset_length, shuffled_indices,
+    metadata=None, map_indices=None,
+):
+    """Align a label-free, canonical cluster map with the training image rows.
+
+    miniImageNet's archived map covers the merged 600-image class blocks;
+    the loader trains on the first 500 rows of each block. Other maps must
+    cover the complete, untruncated training dataset in original row order.
+    """
+    clusters = np.asarray(clusters)
+    if clusters.ndim != 1 or not np.issubdtype(clusters.dtype, np.integer):
+        raise ValueError("Cluster assignments must be a one-dimensional integer array")
+    if np.any(clusters < 0):
+        raise ValueError("Cluster assignments must be non-negative")
+    metadata = {} if metadata is None else metadata
+    if not isinstance(metadata, dict):
+        raise ValueError("Cluster metadata must be an object")
+    if metadata.get("dataset", dataset) != dataset:
+        raise ValueError("Cluster metadata dataset does not match the requested dataset")
+    if int(metadata.get("N", len(clusters))) != len(clusters):
+        raise ValueError("Cluster metadata N does not match the assignment length")
+    if map_indices is not None:
+        map_indices = np.asarray(map_indices)
+        if not np.array_equal(map_indices, np.arange(len(clusters))):
+            raise ValueError("Cluster map indices must be in canonical source row order")
+    if len(clusters) != dataset_length:
+        is_merged_mini = (
+            dataset == "miniImageNet"
+            and len(clusters) % 600 == 0
+            and len(clusters) // 600 * 500 == dataset_length
+            and metadata.get("split") == "train+val+test"
+        )
+        if not is_merged_mini:
+            raise ValueError(
+                f"Cluster map length {len(clusters)} does not match training "
+                f"length {dataset_length} or a declared miniImageNet merged split"
+            )
+        clusters = clusters.reshape(-1, 600)[:, :500].reshape(-1)
+    elif dataset == "miniImageNet" and metadata.get("split") == "train+val+test":
+        raise ValueError("Merged miniImageNet cluster metadata requires the 600-to-500 projection")
+    shuffled_indices = np.asarray(shuffled_indices)
+    if shuffled_indices.ndim != 1 or not np.issubdtype(shuffled_indices.dtype, np.integer):
+        raise ValueError("Training row indices must be one-dimensional integers")
+    if shuffled_indices.size and (
+        shuffled_indices.min() < 0 or shuffled_indices.max() >= dataset_length
+    ):
+        raise ValueError("Training row index lies outside the cluster map")
+    return clusters[shuffled_indices]
+
+
+def load_data_train(pi,bag_build,num_classes, holdout_fraction, dataset="CIFAR10", dspth="./data", bagsize=16, backbone=None, seed=0):
     input_dim = 1
     if dataset == "CIFAR10":
         datalist = [osp.join(dspth, "cifar-10-batches-py", "data_batch_{}".format(i + 1)) for i in range(5)]
@@ -515,15 +567,19 @@ def load_data_train(pi,bag_build,num_classes, holdout_fraction, dataset="CIFAR10
     num_bags_all = dataset_length // bagsize
     data_length = num_bags_all * bagsize
 
+    # Cluster construction owns one seeded stream, including row/split order.
+    # Random and AlphaFirst retain their existing global-RNG behavior.
+    cluster_rng = np.random.default_rng(seed) if bag_build == 'cluster' else None
+    shuffle_rng = cluster_rng if cluster_rng is not None else np.random
     # 2) 全局打乱（样本级）
     random_indices = np.arange(data_length)
-    np.random.shuffle(random_indices)
+    shuffle_rng.shuffle(random_indices)
     data = data[random_indices]
     labels = labels[random_indices]
 
     # 3) 再生成一个索引用于分 bag（bag 内连续切片）
     indices = np.arange(data_length)
-    np.random.shuffle(indices)
+    shuffle_rng.shuffle(indices)
 
     num_bags_all = data_length // bagsize
     # 4) 按 bag 切 80/20（64/80 train, 16/80 test）
@@ -570,7 +626,7 @@ def load_data_train(pi,bag_build,num_classes, holdout_fraction, dataset="CIFAR10
     # 5) bag id 列表
     bag_ids = np.arange(num_bags_all)
     # （可选）再打乱 bag 顺序，保证 train/test bag 随机
-    np.random.shuffle(bag_ids)
+    shuffle_rng.shuffle(bag_ids)
 
     var_bag_ids_1 = bag_ids[:num_train_bags]
     var_bag_ids_2 = bag_ids[num_train_bags:]
@@ -593,7 +649,7 @@ def load_data_train(pi,bag_build,num_classes, holdout_fraction, dataset="CIFAR10
         返回：data_u, label_prob, labels_real, labels_idx, indices_u
         """
         if rng is None:
-            rng = np.random.default_rng()
+            rng = np.random.default_rng(seed)
 
         # ---------- 0) 取出这批 bag 需要的样本子集（严格无放回） ----------
         B = len(bag_id_list)
@@ -658,19 +714,28 @@ def load_data_train(pi,bag_build,num_classes, holdout_fraction, dataset="CIFAR10
             # CSV 格式: idx, label, cluster  (按 idx 升序即原始样本顺序)
             import csv as _csv
             csv_path = _find_cluster_csv(dspth, dataset)
-            _n = data.shape[0] if hasattr(data, 'shape') else len(data)
-            _cluster_list = [None] * _n   # data 已 global-shuffle，先建原始长度数组
+            _cluster_list = [None] * dataset_length
             with open(csv_path, newline="") as _f:
                 for row in _csv.DictReader(_f):
                     _idx = int(row["idx"])
                     if _idx < len(_cluster_list):
                         _cluster_list[_idx] = int(row["cluster"])
+            if any(value is None for value in _cluster_list):
+                raise ValueError("Cluster CSV does not cover every original training row")
             clusters_all = np.array(_cluster_list, dtype=np.int64)
+            cluster_metadata, cluster_map_indices = None, None
         else:
-            z = np.load(_find_cluster_npz(dspth, dataset), allow_pickle=True)
-            clusters_all = z["clusters"].astype(np.int64)  # 全数据顺序的 cluster id
+            with np.load(_find_cluster_npz(dspth, dataset), allow_pickle=False) as z:
+                clusters_all = z["clusters"]
+                cluster_metadata = json.loads(z["meta"].item()) if "meta" in z else None
+                cluster_map_indices = z["indices"] if "indices" in z else None
 
-        clusters = clusters_all[local2global]  # [B*m] chosen 子集的 cluster id
+        aligned_clusters = _cluster_ids_for_training_samples(
+            clusters_all, dataset=dataset, dataset_length=dataset_length,
+            shuffled_indices=random_indices, metadata=cluster_metadata,
+            map_indices=cluster_map_indices,
+        )
+        clusters = aligned_clusters[local2global]
 
         # ---------- 2) 建每簇 pool（局部索引 0..B*m-1），并 shuffle ----------
         pools = {}
@@ -1016,6 +1081,7 @@ def load_data_train(pi,bag_build,num_classes, holdout_fraction, dataset="CIFAR10
             bagsize=bagsize,
             dspth=dspth,
             alpha0=pi,
+            rng=cluster_rng,
         )
         (var_data_u_2, var_label_prob_2, var_labels_real_2, var_labels_idx_2, var_indices_u_2) = (
             build_bags_cluster(
@@ -1028,6 +1094,7 @@ def load_data_train(pi,bag_build,num_classes, holdout_fraction, dataset="CIFAR10
                 bagsize=bagsize,
                 dspth=dspth,
                 alpha0=pi,
+                rng=cluster_rng,
             ) if len(var_bag_ids_2) > 0 else _empty
         )
     elif bag_build == 'alphafirst':
@@ -1257,7 +1324,9 @@ def get_train_loader(pi,bag_build,classes, holdout_fraction, dataset, batch_size
                      root="data", method="co", supervised=False, backbone=None,
                      seed=0, num_bags=None, num_workers=0, instances_per_epoch=200000,
                      train_instance_sample_size=None, num_reviewers=None,
-                     cluster_seed=0, target_avg_bag_size=None):
+                     cluster_seed=0, target_avg_bag_size=None,
+                     ku_merge_validation_into_train=False,
+                     ku_unknown_bag_max_size=None, ku_unknown_bag_seed=0):
     if is_fed_isic2019_dataset(dataset):
         if bag_build != "feature":
             raise ValueError(
@@ -1418,26 +1487,33 @@ def get_train_loader(pi,bag_build,classes, holdout_fraction, dataset, batch_size
             num_workers=num_workers,
             train_instance_sample_size=train_instance_sample_size,
             paired_views=(method == "L^2P-AHIL"),
+            merge_validation_into_train=ku_merge_validation_into_train,
+            unknown_bag_max_size=ku_unknown_bag_max_size,
+            unknown_bag_seed=ku_unknown_bag_seed,
         )
         if classes is not None and int(classes) != bundle.num_classes:
             raise ValueError(
                 f"--n-classes={classes} disagrees with KU-Optofil ({bundle.num_classes})"
             )
         train_probs = np.asarray(train_loader.dataset.label_prob, dtype=np.float32)
-        val_probs = np.asarray(val_loader.dataset.label_prob, dtype=np.float32)
         train_sizes = np.asarray(
             [len(bag.indices) for bag in train_loader.dataset.bags], dtype=np.float64
         )
-        val_sizes = np.asarray(
-            [len(bag.indices) for bag in val_loader.dataset.bags], dtype=np.float64
-        )
         prior_train = np.average(train_probs, axis=0, weights=train_sizes)
-        prior_val = np.average(val_probs, axis=0, weights=val_sizes)
-        prior_all = np.average(
-            np.concatenate([train_probs, val_probs], axis=0),
-            axis=0,
-            weights=np.concatenate([train_sizes, val_sizes]),
-        )
+        if val_loader is None:
+            val_sizes = np.empty(0, dtype=np.float64)
+            prior_val = prior_train.copy()
+            prior_all = prior_train.copy()
+        else:
+            val_probs = np.asarray(val_loader.dataset.label_prob, dtype=np.float32)
+            val_sizes = np.asarray(
+                [len(bag.indices) for bag in val_loader.dataset.bags], dtype=np.float64
+            )
+            prior_val = np.average(val_probs, axis=0, weights=val_sizes)
+            prior_all = np.average(
+                np.concatenate([train_probs, val_probs], axis=0), axis=0,
+                weights=np.concatenate([train_sizes, val_sizes]),
+            )
         return (
             train_loader,
             val_loader,
@@ -1590,6 +1666,7 @@ def get_train_loader(pi,bag_build,classes, holdout_fraction, dataset, batch_size
     train_pack, var_pack, prior_train, prior_val, prior_all = load_data_train(
         pi, bag_build, classes, holdout_fraction,
         dataset=dataset, dspth=root, bagsize=bag_size, backbone=backbone,
+        seed=seed,
     )
 
     data_u, label_prob, labels, label_idx, dataset_length, indices_u, input_dim = train_pack

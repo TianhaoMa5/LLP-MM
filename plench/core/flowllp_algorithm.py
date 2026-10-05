@@ -87,21 +87,38 @@ def build_flowllp_algorithm(
             self.network = nn.Sequential(
                 self.featurizer, self.projector, self.classifier
             )
-            self.optimizer = torch.optim.SGD(
-                self.network.parameters(),
-                lr=hp["lr"],
-                momentum=0.9,
-                weight_decay=hp.get("weight_decay", 5e-4),
-                nesterov=bool(hp.get("nesterov", True)),
+            # Rebuild the optimizer after adding the learned projector. Keep
+            # the historical FlowLLP defaults when no protocol is specified.
+            optimizer_name = str(hp.get("optimizer", "SGD")).lower()
+            optimizer_options = {
+                "lr": float(hp["lr"]),
+                "weight_decay": float(hp.get("weight_decay", 5e-4)),
+            }
+            if optimizer_name == "sgd":
+                momentum = float(hp.get("momentum", 0.9))
+                self.optimizer = torch.optim.SGD(
+                    self.network.parameters(),
+                    momentum=momentum,
+                    nesterov=bool(hp.get("nesterov", momentum > 0)),
+                    **optimizer_options,
+                )
+            elif optimizer_name == "adam":
+                self.optimizer = torch.optim.Adam(
+                    self.network.parameters(), **optimizer_options
+                )
+            else:
+                raise ValueError(f"Unsupported optimizer: {optimizer_name!r}")
+            warmup_iter = int(
+                float(hp.get("warmup_fraction", 0.08)) * self.flow_total_steps
             )
-            warmup_iter = int(0.08 * self.flow_total_steps)
-            warmup_ratio = 5e-5 / hp["lr"]
+            warmup_ratio = float(hp.get("warmup_ratio", 5e-5 / hp["lr"]))
             self.scheduler = scheduler_class(
                 self.optimizer,
                 self.flow_total_steps,
                 warmup_iter=warmup_iter,
                 warmup_ratio=warmup_ratio,
-                warmup="linear",
+                warmup=str(hp.get("warmup", "linear")),
+                cosine_mode=str(hp.get("cosine_mode", "legacy_quarter")),
             )
 
             number_of_anchors = (

@@ -1,0 +1,700 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-10-05",
+  "paper_title": "Rethinking Learning from Label Proportions via Moment Matching",
+  "release_claim": "implementation_and_partial_archived_evidence_not_complete_reproduction",
+  "manuscript_snapshot": {
+    "snapshot_id": "gan-maintext-20261005/updated",
+    "document_entrypoint": "main.tex",
+    "source_files": [
+      {
+        "name": "main.tex",
+        "sha256": "6007cfe4f512387b2a780007bd3df4c87bef43eeb72741b3e3c464d7fed552b9"
+      },
+      {
+        "name": "sections/experiments.tex",
+        "sha256": "dcfd63340b5a1e5751a9fd1616a6d55caa4d3bbb0f7c150913c727ac7e760b12"
+      },
+      {
+        "name": "sections/appendix.tex",
+        "sha256": "8b1e6554a599663937909392ad5cdf00d18615cf86bd7eafb2693722079b1b88"
+      },
+      {
+        "name": "sections/gan_compatibility.tex",
+        "sha256": "18eb8a4c4237f7f977a0b090bde1f05006e5c8f2189fa1c5c84836739964f811"
+      },
+      {
+        "name": "sections/fed_isic2019.tex",
+        "sha256": "bc3e72e49686a55248606fba03466c325997c6ebf6d55bf0726db4137d583a3c"
+      },
+      {
+        "name": "sections/order_runtime_dataset_rows_bigfonts.pdf",
+        "sha256": "6278d1ae3a73ca3e57ead6912974787d5dbf705248246faaf617adc2f0060633"
+      },
+      {
+        "name": "sections/introduction.tex",
+        "sha256": "9050881ccd63b16f3f941a46d7dd22ba3a1f0b893db846453780600d040f9bcf"
+      }
+    ],
+    "note": "The root workspace manuscript was stale. This later source snapshot follows the verified online snapshot plus the final caption and GAN implementation-detail edits. No manuscript source or PDF is redistributed here.",
+    "alternate_entrypoint_caveat": "The ICLRVersion conditional excludes GAN compatibility; the main.tex scope audited here includes it."
+  },
+  "main_methods": [
+    "PM",
+    "DSQ",
+    "LLP-PVC",
+    "LLP-FC",
+    "ROT",
+    "EasyLLP",
+    "EasyLLP-ABS",
+    "GeneralUPM",
+    "GeneralUPM-ABS",
+    "FlowLLP",
+    "LLP-MM"
+  ],
+  "methods": [
+    {
+      "paper_name": "PM",
+      "algorithm": "PM",
+      "code": "plench/core/algorithms.py",
+      "explicit_variant_hparams": {},
+      "historical_numbers_require_revalidation": false
+    },
+    {
+      "paper_name": "DSQ",
+      "algorithm": "LLP_DSQ",
+      "code": "plench/core/algorithms.py",
+      "explicit_variant_hparams": {},
+      "historical_numbers_require_revalidation": false
+    },
+    {
+      "paper_name": "LLP-PVC",
+      "algorithm": "LLP_PVC",
+      "code": "plench/core/algorithms.py",
+      "explicit_variant_hparams": {},
+      "historical_numbers_require_revalidation": false
+    },
+    {
+      "paper_name": "LLP-FC",
+      "algorithm": "LLP_FC",
+      "code": "plench/core/algorithms.py",
+      "explicit_variant_hparams": {
+        "mode": "approx",
+        "group_weight": 1.0,
+        "entropy_weight": 0.0
+      },
+      "historical_numbers_require_revalidation": false
+    },
+    {
+      "paper_name": "ROT",
+      "algorithm": "ROT",
+      "code": "plench/core/algorithms.py",
+      "explicit_variant_hparams": {},
+      "historical_numbers_require_revalidation": false
+    },
+    {
+      "paper_name": "EasyLLP",
+      "algorithm": "EasyLLP",
+      "code": "plench/core/algorithms.py",
+      "explicit_variant_hparams": {
+        "flooding": false
+      },
+      "historical_numbers_require_revalidation": false
+    },
+    {
+      "paper_name": "EasyLLP-ABS",
+      "algorithm": "EasyLLP",
+      "code": "plench/core/algorithms.py",
+      "explicit_variant_hparams": {
+        "flooding": true,
+        "flooding_b": 0.0
+      },
+      "historical_numbers_require_revalidation": true
+    },
+    {
+      "paper_name": "GeneralUPM",
+      "algorithm": "GeneralUPM",
+      "code": "plench/core/algorithms.py",
+      "explicit_variant_hparams": {
+        "flooding": false
+      },
+      "historical_numbers_require_revalidation": false
+    },
+    {
+      "paper_name": "GeneralUPM-ABS",
+      "algorithm": "GeneralUPM",
+      "code": "plench/core/algorithms.py",
+      "explicit_variant_hparams": {
+        "flooding": true,
+        "flooding_b": 0.0
+      },
+      "historical_numbers_require_revalidation": true
+    },
+    {
+      "paper_name": "FlowLLP",
+      "algorithm": "LLP_FlowLLP",
+      "code": "plench/core/flowllp_algorithm.py",
+      "explicit_variant_hparams": {},
+      "historical_numbers_require_revalidation": false
+    },
+    {
+      "paper_name": "LLP-MM",
+      "algorithm": "LLP_MM",
+      "code": "plench/core/algorithms.py",
+      "explicit_variant_hparams": {},
+      "historical_numbers_require_revalidation": false
+    },
+    {
+      "paper_name": "LLP-GAN",
+      "code": "reproduction/llp_gan_pytorch/train.py",
+      "explicit_variant_arguments": {
+        "moment_order": 1
+      }
+    },
+    {
+      "paper_name": "MM+GAN",
+      "code": "reproduction/llp_gan_pytorch/train.py",
+      "explicit_variant_arguments": {
+        "moment_order": 8,
+        "mm_implementation": "paper_dp"
+      }
+    }
+  ],
+  "experiments": [
+    {
+      "id": "synthetic_random_cluster",
+      "paper_label": "tab:cifar_random_cluster",
+      "location": {
+        "file": "sections/experiments.tex",
+        "lines": [
+          1,
+          102
+        ]
+      },
+      "section": "main",
+      "datasets": [
+        "CIFAR10",
+        "CIFAR100",
+        "miniImageNet"
+      ],
+      "bag_modes": [
+        "random",
+        "cluster"
+      ],
+      "bag_sizes": [
+        16,
+        32,
+        64,
+        128
+      ],
+      "methods": [
+        "PM",
+        "DSQ",
+        "LLP-PVC",
+        "LLP-FC",
+        "ROT",
+        "EasyLLP",
+        "EasyLLP-ABS",
+        "GeneralUPM",
+        "GeneralUPM-ABS",
+        "FlowLLP",
+        "LLP-MM"
+      ],
+      "runs_per_condition_reported": 3,
+      "seeds_in_inherited_protocol": [
+        0,
+        1,
+        2
+      ],
+      "metric": "test_accuracy",
+      "units": "percent",
+      "condition_count": 264,
+      "expected_run_count": 792,
+      "evidence_status": "incomplete_per_seed_provenance",
+      "code": [
+        "plench/train.py",
+        "plench/core/algorithms.py",
+        "plench/core/flowllp_algorithm.py",
+        "plench/core/networks.py"
+      ],
+      "blocking_issues": [
+        "main_table_raw_runs",
+        "historical_abs_bug",
+        "archived_bag_hashes"
+      ]
+    },
+    {
+      "id": "synthetic_alphafirst",
+      "paper_label": "tab:cifar_alphafirst",
+      "location": {
+        "file": "sections/experiments.tex",
+        "lines": [
+          104,
+          156
+        ]
+      },
+      "section": "main",
+      "datasets": [
+        "CIFAR10",
+        "CIFAR100",
+        "miniImageNet"
+      ],
+      "bag_modes": [
+        "alphafirst"
+      ],
+      "bag_sizes": [
+        16,
+        32,
+        64,
+        128
+      ],
+      "methods": [
+        "PM",
+        "DSQ",
+        "LLP-PVC",
+        "LLP-FC",
+        "ROT",
+        "EasyLLP",
+        "EasyLLP-ABS",
+        "GeneralUPM",
+        "GeneralUPM-ABS",
+        "FlowLLP",
+        "LLP-MM"
+      ],
+      "runs_per_condition_reported": 3,
+      "seeds_in_inherited_protocol": [
+        0,
+        1,
+        2
+      ],
+      "metric": "test_accuracy",
+      "units": "percent",
+      "condition_count": 132,
+      "expected_run_count": 396,
+      "evidence_status": "incomplete_per_seed_provenance",
+      "code": [
+        "plench/train.py",
+        "reproduction/bags/cifar10_manifest.py"
+      ],
+      "blocking_issues": [
+        "main_table_raw_runs",
+        "historical_abs_bug",
+        "archived_bag_hashes",
+        "flowllp_mini_alphafirst"
+      ]
+    },
+    {
+      "id": "gan_cifar10",
+      "paper_label": "tab:gan-compatibility",
+      "location": {
+        "file": "sections/gan_compatibility.tex",
+        "lines": [
+          1,
+          26
+        ]
+      },
+      "section": "main",
+      "datasets": [
+        "cifar10"
+      ],
+      "bag_modes": [
+        "random",
+        "cluster",
+        "alphafirst"
+      ],
+      "bag_sizes": [
+        16,
+        32,
+        64,
+        128
+      ],
+      "methods": [
+        "LLP-GAN",
+        "MM+GAN"
+      ],
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "metric": "test_accuracy",
+      "units": "percent",
+      "condition_count": 24,
+      "expected_run_count": 72,
+      "selection": "final_epoch",
+      "epoch": 500,
+      "std_ddof": 1,
+      "evidence_status": "per_seed_extract_aggregation_verified_training_not_rerun",
+      "artifacts": [
+        "results/gan_cifar10_runs.json",
+        "results/gan_cifar10_summary.csv"
+      ],
+      "code": [
+        "train_llpgan_cifar.py",
+        "reproduction/llp_gan_pytorch/train.py",
+        "plench/core/order.py"
+      ],
+      "caveats": [
+        "12 MM+GAN cluster epoch fields are supported by the companion audit statement rather than retained result objects.",
+        "Archived bag hash byte scope is unverified; do not enforce as a newly created NPZ file hash."
+      ]
+    },
+    {
+      "id": "ku_optofil",
+      "paper_label": "tab:ku-optofil-semi-real",
+      "location": {
+        "file": "sections/fed_isic2019.tex",
+        "lines": [
+          7,
+          38
+        ]
+      },
+      "section": "main",
+      "datasets": [
+        "KUOptofilPBC"
+      ],
+      "methods": [
+        "PM",
+        "DSQ",
+        "LLP-PVC",
+        "LLP-FC",
+        "ROT",
+        "EasyLLP",
+        "EasyLLP-ABS",
+        "GeneralUPM",
+        "GeneralUPM-ABS",
+        "FlowLLP",
+        "LLP-MM"
+      ],
+      "seeds_reported_by_archive": [
+        0,
+        1,
+        2
+      ],
+      "expected_run_count": 33,
+      "metric_cell_count": 44,
+      "metrics": [
+        "accuracy",
+        "macro_f1",
+        "balanced_accuracy",
+        "weighted_f1"
+      ],
+      "units": "percent",
+      "selection": "highest_test_macro_f1",
+      "epoch_budget": 100,
+      "std_ddof": 0,
+      "evidence_status": "aggregate_only_not_recomputed_from_runs",
+      "artifacts": [
+        "results/ku_paper_summary.csv"
+      ],
+      "code": [
+        "plench/data/ku_optofil_pbc.py",
+        "plench/data/ref2021.py",
+        "src/mo_matching/llp/multiclass.py",
+        "plench/train.py"
+      ],
+      "blocking_issues": [
+        "ku_raw_runs",
+        "historical_abs_bug"
+      ]
+    },
+    {
+      "id": "order_runtime",
+      "paper_label": "fig:order-effect-runtime-allbags",
+      "location": {
+        "file": "sections/experiments.tex",
+        "lines": [
+          203,
+          223
+        ]
+      },
+      "section": "main",
+      "datasets": [
+        "CIFAR10",
+        "CIFAR100"
+      ],
+      "orders_by_dataset": {
+        "CIFAR10": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13
+        ],
+        "CIFAR100": [
+          1,
+          2,
+          3
+        ]
+      },
+      "bag_sizes": [
+        16,
+        32,
+        64,
+        128
+      ],
+      "bag_modes": [
+        "random",
+        "cluster",
+        "alphafirst"
+      ],
+      "accuracy_condition_count": 192,
+      "run_count": null,
+      "seeds": null,
+      "metrics": [
+        "test_accuracy",
+        "runtime_per_epoch"
+      ],
+      "units": {
+        "test_accuracy": "percent",
+        "runtime_per_epoch": "seconds"
+      },
+      "hardware_reported": "NVIDIA A100-SXM4-40GB and AMD EPYC 7742 64-Core Processor",
+      "evidence_status": "MISSING_RAW_DATA_AND_PLOT_RECIPE",
+      "publication_blocker": true,
+      "code": [
+        "plench/core/order.py"
+      ],
+      "blocking_issues": [
+        "order_runtime_evidence"
+      ]
+    },
+    {
+      "id": "bag_construction_illustration",
+      "paper_label": "fig:bag_con",
+      "location": {
+        "file": "sections/introduction.tex",
+        "lines": [
+          13,
+          14
+        ]
+      },
+      "section": "main",
+      "kind": "conceptual_illustration_not_an_experiment",
+      "run_count": 0,
+      "evidence_status": "not_redistributed"
+    }
+  ],
+  "appendix": {
+    "extra_experimental_tables": 0,
+    "implementation_details": {
+      "file": "sections/appendix.tex",
+      "lines": [
+        1328,
+        1389
+      ]
+    },
+    "contains": [
+      "theoretical_proofs",
+      "bag_construction",
+      "baseline_and_optimization_settings",
+      "gan_settings",
+      "ku_settings"
+    ]
+  },
+  "protocol": {
+    "synthetic": {
+      "backbones": {
+        "CIFAR10": "modified_stem_ResNet18",
+        "CIFAR100": "modified_stem_ResNet18",
+        "miniImageNet": "modified_stem_ResNet34"
+      },
+      "epochs": 500,
+      "samples_per_update": 1024,
+      "optimizer": "SGD",
+      "momentum": 0.9,
+      "weight_decay": 0.0005,
+      "learning_rate": 0.05,
+      "pvc_learning_rate": 0.005,
+      "schedule": "linear_warmup_then_cosine",
+      "llp_mm_order": {
+        "CIFAR10": 8,
+        "CIFAR100": 3,
+        "miniImageNet": 3
+      },
+      "llp_mm_loss": "cross_entropy",
+      "llp_mm_order_weights": "uniform_1_over_s",
+      "surrogate_exception": "DSQ uses MSE",
+      "evidence": {
+        "file": "sections/appendix.tex",
+        "lines": [
+          1355,
+          1367
+        ]
+      },
+      "inherited_not_fully_specified_in_latest_manuscript": {
+        "alphafirst_alpha": 10.0,
+        "cluster_alpha": 1.0,
+        "trial_seeds": [
+          0,
+          1,
+          2
+        ],
+        "warmup_fraction": 0.08
+      },
+      "main_table_std_ddof": null,
+      "main_table_std_ddof_note": "Latest main table says standard deviation without specifying ddof; recover exact aggregation convention from original runs."
+    },
+    "gan": {
+      "epochs": 500,
+      "samples_per_update": 1024,
+      "moment_order": 8,
+      "moment_weights": "uniform",
+      "moment_implementation_observed": "paper_dp",
+      "discriminator_optimizer": "SGD",
+      "generator_optimizer": "Adam",
+      "generator_lr": 0.0003,
+      "generator_betas": [
+        0.5,
+        0.999
+      ],
+      "noise_dimension": 100,
+      "lambda_bag": 1.0,
+      "lambda_adversarial": 1.0,
+      "warmup_epochs_observed": 5,
+      "mixed_precision_observed": false,
+      "gradient_clip_observed": 5,
+      "evidence": {
+        "file": "sections/appendix.tex",
+        "lines": [
+          1371,
+          1373
+        ]
+      }
+    },
+    "ku": {
+      "classes": 13,
+      "train_cells": 25719,
+      "test_cells": 5765,
+      "merge_train_validation": true,
+      "train_bags": 245,
+      "known_patient_train_bags": 219,
+      "unknown_cells": 3204,
+      "unknown_train_bags": 26,
+      "unknown_bag_sizes": [
+        123,
+        124
+      ],
+      "test_bags": 56,
+      "backbone": "ImageNet_pretrained_standard_stem_ResNet18",
+      "image_resolution": 224,
+      "optimizer": "Adam",
+      "lr": 0.001,
+      "epochs": 100,
+      "warmup_epochs": 5,
+      "llp_mm_order": 8,
+      "llp_mm_dtype": "float64",
+      "llp_mm_kernel": "stable_dp",
+      "short_bags": "use_feasible_orders_and_renormalize_weights",
+      "flowllp_epochs": [
+        50,
+        50
+      ],
+      "bags_per_update_reported_by_archive": {
+        "GeneralUPM": 5,
+        "GeneralUPM-ABS": 5,
+        "other_methods": 4
+      },
+      "forward_chunk_sizes_reported_by_archive": [
+        8,
+        32
+      ],
+      "selection": "highest_test_macro_f1",
+      "selection_caveat": "This reproduces the reported test-selected protocol; it is not validation-selected or an unbiased held-out estimate.",
+      "evidence": {
+        "file": "sections/appendix.tex",
+        "lines": [
+          1379,
+          1389
+        ]
+      }
+    }
+  },
+  "gaps": [
+    {
+      "id": "historical_abs_bug",
+      "severity": "RED",
+      "status": "historical_numbers_require_rerun_or_revalidation",
+      "detail": "The historical flooding helper returned the raw loss at b=0, so nominal ABS runs did not necessarily compute absolute loss. The release correction does not retroactively validate the paper numbers. Revalidate EasyLLP-ABS and GeneralUPM-ABS across synthetic and KU tables; do not relabel corrected runs as the historical results."
+    },
+    {
+      "id": "main_table_raw_runs",
+      "severity": "RED",
+      "status": "not_bundled",
+      "detail": "The complete 1188-run main-table raw metrics/config/selection provenance was not recovered for this release audit."
+    },
+    {
+      "id": "ku_raw_runs",
+      "severity": "RED",
+      "status": "aggregate_only",
+      "detail": "Only the selected-epoch aggregate extract is published here, not all 33 raw epoch logs. No per-seed KU scores have been fabricated from mean/std."
+    },
+    {
+      "id": "order_runtime_evidence",
+      "severity": "RED",
+      "status": "missing",
+      "detail": "The manuscript figure exists in the source snapshot, but raw measurements, seeds, timing procedure, and plotting code have not been recovered. The release does not include or regenerate the figure."
+    },
+    {
+      "id": "archived_bag_hashes",
+      "severity": "AMBER",
+      "status": "known_historical_limitation",
+      "detail": "Archived CIFAR100/miniImageNet outputs lack bag-manifest hashes; exact instance-wise bag alignment is not verifiable. Latest manuscript explicitly discloses this."
+    },
+    {
+      "id": "flowllp_mini_alphafirst",
+      "severity": "RED",
+      "status": "missing_formal_source",
+      "detail": "The previously checked local FlowLLP summary has only 32 of 36 configuration aggregates, lacking miniImageNet alphafirst. Old pi=1 alphafirst outputs are invalid for the pi=10 protocol and cannot fill this gap."
+    },
+    {
+      "id": "clean_environment_training",
+      "severity": "AMBER",
+      "status": "not_performed",
+      "detail": "Evidence aggregation and implementation checks do not constitute a full GPU rerun of the current paper."
+    },
+    {
+      "id": "cluster_index_alignment_and_seed",
+      "severity": "RED",
+      "status": "code_correction_historical_numbers_unverified",
+      "detail": "Inherited cluster loader indexed original cluster assignments in shuffled sample space and used an unseeded Generator. miniImageNet full-60000 map must be projected to the 50000 training subset. Corrected mapping and seeding require historical Cluster rows to be verified or rerun; original map is transductive."
+    }
+  ],
+  "out_of_current_paper_scope": [
+    "CIFAR100 GAN compatibility",
+    "LLP-Gaussian",
+    "FedISIC2019",
+    "CCT",
+    "UNSW-NB15",
+    "MiniCriteo",
+    "AGNews/Yelp/Yahoo text sweeps",
+    "CV/LEM",
+    "AI4Arctic",
+    "Sentinel2",
+    "REF2021",
+    "Amazon/MovieLens/ESCI",
+    "Huebner2017"
+  ],
+  "verification_command": "python scripts/summarize_paper_evidence.py --check",
+  "recovered_raw_log_extracts": {
+    "main_table_runs": 12,
+    "main_table_expected_runs": 1188,
+    "ku_runs": 1,
+    "ku_expected_runs": 33,
+    "report": "docs/RECOVERED_LOGS.md",
+    "files": [
+      "results/main_table_recovered_runs.json",
+      "results/main_table_recovered_summary.csv",
+      "results/ku_recovered_run.json"
+    ],
+    "note": "Raw source log hashes and sanitized metric/config extracts, not fresh training reruns."
+  }
+}

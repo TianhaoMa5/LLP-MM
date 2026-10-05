@@ -545,6 +545,33 @@ def _llp_mm_variable_loss(
     if not slices:
         raise ValueError("LLP-MM received no bags")
 
+    # A natural patient can contain fewer cells than the configured order.
+    # Keep it intact and normalize the weights over its feasible orders.
+    # Ordinary bags retain the existing objective and configured weights.
+    if any(len(indices) < int(order) for indices in slices):
+        configured_weights = (
+            [1.0 / float(order)] * int(order)
+            if order_weights is None else list(order_weights)
+        )
+        per_bag = []
+        for bag_number, indices in enumerate(slices):
+            effective_order = min(int(order), len(indices))
+            active_weights = configured_weights[:effective_order]
+            if effective_order < int(order):
+                active_total = sum(active_weights)
+                if active_total <= 0:
+                    raise ValueError('No positive weight for the orders feasible in a short bag')
+                active_weights = [value * sum(configured_weights) / active_total
+                                  for value in active_weights]
+            per_bag.append(_llp_mm_variable_loss(
+                probabilities[indices], proportions[bag_number:bag_number + 1],
+                [torch.arange(len(indices), device=probabilities.device)],
+                effective_order, order_weights=active_weights,
+                loss_type=loss_type, moment_algorithm=moment_algorithm,
+                compute_dtype=compute_dtype, ce_smoothing_tau=ce_smoothing_tau,
+            ))
+        return torch.stack(per_bag).mean()
+
     try:
         from mo_matching.llp.structured_multiclass import (
             variable_multiclass_llp_mm_loss,

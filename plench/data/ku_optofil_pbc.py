@@ -1,6 +1,8 @@
 """KU-Optofil PBC natural patient-bag LLP dataset adapter.
 
-Every item is one anonymized patient and every instance is one RGB cell image.
+By default, each item groups one patient ID and each instance is one RGB cell
+image. The missing-ID ``unknown`` group is not a verified single patient;
+optional training-only splitting turns it into deterministic synthetic bags.
 Ground-truth cell labels are returned for sanity checks and evaluation only;
 ``update_ku_optofil_algorithm`` deliberately removes them before constructing
 the LLP loss.
@@ -267,6 +269,46 @@ def _strong_image_transform():
     )
 
 
+def partition_ku_unknown_indices(
+    indices: np.ndarray, max_bag_size: int, seed: int,
+) -> list[np.ndarray]:
+    """Label-free, balanced partition of a missing-patient-ID group."""
+    if int(max_bag_size) <= 0:
+        raise ValueError('unknown_bag_max_size must be positive')
+    indices = np.asarray(indices, dtype=np.int64)
+    if indices.ndim != 1 or not len(indices):
+        raise ValueError('Expected a nonempty one-dimensional index array')
+    if len(np.unique(indices)) != len(indices):
+        raise ValueError('Unknown group contains repeated indices')
+    shuffled = np.random.default_rng(int(seed)).permutation(np.sort(indices))
+    n_parts = (len(indices) + int(max_bag_size) - 1) // int(max_bag_size)
+    return [np.sort(part) for part in np.array_split(shuffled, n_parts)]
+
+
+def _split_unknown_training_bags(bundle, bags, max_bag_size, seed):
+    if int(max_bag_size) <= 0:
+        raise ValueError('unknown_bag_max_size must be positive')
+    result = []
+    for bag in bags:
+        is_unknown = np.all(bundle.patient_ids[bag.indices] == 'unknown')
+        if not is_unknown or len(bag.indices) <= int(max_bag_size):
+            result.append(bag)
+            continue
+        # Assignment sees indices only. Hidden labels are used afterwards to
+        # construct each newly formed bag's aggregate target, never membership.
+        assignments = partition_ku_unknown_indices(bag.indices, max_bag_size, seed)
+        for part_number, indices in enumerate(assignments):
+            counts = np.bincount(bundle.instance_labels[indices], minlength=NUM_CLASSES)
+            result.append(KUOptofilBag(
+                bag_id=f'{bag.bag_id}_seed{seed}_max{max_bag_size}_part{part_number:04d}',
+                indices=indices,
+                proportions=(counts / len(indices)).astype(np.float32),
+                class_counts=counts.astype(np.int64),
+                split=bag.split,
+            ))
+    return result
+
+
 class KUOptofilPBCDataset(Dataset):
     """One dataset item is one complete natural patient bag by default."""
 
@@ -278,6 +320,9 @@ class KUOptofilPBCDataset(Dataset):
         seed: int = 42,
         train_instance_sample_size: Optional[int] = None,
         paired_views: bool = False,
+        merge_validation_into_train: bool = False,
+        unknown_bag_max_size: Optional[int] = None,
+        unknown_bag_seed: int = 0,
     ) -> None:
         if split not in {"train", "val", "test"}:
             raise ValueError("KU-Optofil split must be train, val, or test")
@@ -287,7 +332,18 @@ class KUOptofilPBCDataset(Dataset):
             raise ValueError("train_instance_sample_size must be positive or null")
         self.bundle = bundle
         self.split = split
-        self.bags = bundle.bags_for_split(split)
+        if merge_validation_into_train and split != 'train':
+            raise ValueError('Validation can only be merged into the training dataset')
+        self.bags = (
+            [bag for bag in bundle.bags if bag.split in {'train', 'val'}]
+            if merge_validation_into_train else bundle.bags_for_split(split)
+        )
+        if unknown_bag_max_size is not None:
+            if split != 'train':
+                raise ValueError('Unknown-group splitting is training-only')
+            self.bags = _split_unknown_training_bags(
+                bundle, self.bags, unknown_bag_max_size, unknown_bag_seed,
+            )
         self.seed = int(seed)
         self.epoch = 0
         self.train_instance_sample_size = (
@@ -397,6 +453,9 @@ def build_ku_optofil_loaders(
     num_workers: int = 0,
     train_instance_sample_size: Optional[int] = None,
     paired_views: bool = False,
+    merge_validation_into_train: bool = False,
+    unknown_bag_max_size: Optional[int] = None,
+    unknown_bag_seed: int = 0,
 ):
     bundle = load_ku_optofil_bundle(root)
     train_dataset = KUOptofilPBCDataset(
@@ -405,10 +464,20 @@ def build_ku_optofil_loaders(
         seed=seed,
         train_instance_sample_size=train_instance_sample_size,
         paired_views=paired_views,
+        merge_validation_into_train=merge_validation_into_train,
+        unknown_bag_max_size=unknown_bag_max_size,
+        unknown_bag_seed=unknown_bag_seed,
     )
-    val_dataset = KUOptofilPBCDataset(bundle, "val", seed=seed)
+    val_dataset = None if merge_validation_into_train else KUOptofilPBCDataset(bundle, "val", seed=seed)
     _print_split("KU-Optofil PBC train", train_dataset)
-    _print_split("KU-Optofil PBC val", val_dataset)
+    if unknown_bag_max_size is not None:
+        print(f'KU-Optofil PBC: unknown-ID training group split at max '
+              f'{unknown_bag_max_size}, bag seed={unknown_bag_seed}; '
+              'known patients and test bags unchanged')
+    if val_dataset is not None:
+        _print_split("KU-Optofil PBC val", val_dataset)
+    else:
+        print('KU-Optofil PBC: official validation patients merged into training; no validation loader')
     generator = torch.Generator().manual_seed(int(seed))
     common = dict(
         batch_size=max(1, int(batch_size)),
@@ -421,7 +490,7 @@ def build_ku_optofil_loaders(
     train_loader = DataLoader(
         train_dataset, shuffle=True, generator=generator, **common
     )
-    val_loader = DataLoader(val_dataset, shuffle=False, **common)
+    val_loader = None if val_dataset is None else DataLoader(val_dataset, shuffle=False, **common)
     return train_loader, val_loader, bundle, bundle.input_shape
 
 
@@ -557,9 +626,19 @@ def update_ku_optofil_algorithm(
         feature_chunks = []
         logits_chunks = []
         for start in range(0, len(batch["x"]), chunk_size):
-            chunk_features, chunk_logits = algorithm._forward_with_features(
-                batch["x"][start : start + chunk_size].to(device)
-            )
+            chunk = batch["x"][start : start + chunk_size].to(device)
+            if activation_checkpoint:
+                chunk_features, chunk_logits = checkpoint(
+                    algorithm._forward_with_features,
+                    chunk,
+                    use_reentrant=False,
+                    context_fn=lambda: (
+                        nullcontext(),
+                        _restore_batch_norm_running_stats(algorithm.network),
+                    ),
+                )
+            else:
+                chunk_features, chunk_logits = algorithm._forward_with_features(chunk)
             feature_chunks.append(chunk_features)
             logits_chunks.append(chunk_logits)
         return algorithm.update_from_outputs(
@@ -707,6 +786,7 @@ def evaluate_ku_optofil(
         "bags": len(bag_ids),
         "instance_accuracy": float(tp.sum() / max(1.0, support.sum())),
         "macro_f1": float(f1.mean()),
+        "balanced_accuracy": float(recall[support > 0].mean()),
         "weighted_f1": float(np.average(f1, weights=support)),
         "bag_proportion_mae": float(absolute.mean()),
         "bag_proportion_rmse": float(np.sqrt(np.square(predicted_bags - target_bags).mean())),

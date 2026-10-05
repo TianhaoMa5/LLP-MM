@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -17,6 +19,7 @@ import os
 from sklearn.metrics import euclidean_distances
 from .FFT import compute_CC_loss_fft_precise_batched
 from . import networks
+from .gaussian_count import gaussian_count_nll
 import collections
 from torch.optim.lr_scheduler import _LRScheduler
 
@@ -36,6 +39,7 @@ except Exception:
 ALGORITHMS = [
     'PM',
     'LLP_MM',
+    'LLP_Gaussian',
     'LLP_DSQ',
     'LLP_PVC',
     'LLP_SimCLR',
@@ -466,6 +470,53 @@ class PM(Algorithm):
         bag_preds = _bag_means(probs, index, len(proportions)).clamp_min(1e-12)
         loss = -(proportions * bag_preds.log()).sum(dim=1).mean()
         return loss
+
+
+class LLP_Gaussian(Algorithm):
+    """Second-order Gaussian likelihood for the observed bag-label counts."""
+
+    def __init__(self, epochs, input_shape, train_givenY, hparams, bagsize):
+        super().__init__(epochs, input_shape, train_givenY, hparams, bagsize)
+        self.count_variance_floor = float(
+            hparams.get("gaussian_count_variance_floor", 1.0 / 12.0)
+        )
+        self.bags_per_microbatch = hparams.get("gaussian_bags_per_microbatch")
+        if self.bags_per_microbatch is not None:
+            self.bags_per_microbatch = int(self.bags_per_microbatch)
+            if self.bags_per_microbatch < 1:
+                raise ValueError("gaussian_bags_per_microbatch must be positive")
+
+    def update(self, minibatches):
+        images, proportions = minibatches
+        number_of_bags = int(proportions.shape[0])
+        if self.bags_per_microbatch is None or self.bags_per_microbatch >= number_of_bags:
+            loss = gaussian_count_nll(
+                self.predict(images),
+                proportions,
+                self.bagsize,
+                self.count_variance_floor,
+            )
+            return self._backward_step(loss)
+
+        # The Gaussian likelihood is a mean of independent bag terms.  Sum
+        # their weighted gradients before a single optimizer/scheduler step,
+        # preserving the logical bag batch on memory-limited GPUs.
+        self.optimizer.zero_grad()
+        loss_value = 0.0
+        for first in range(0, number_of_bags, self.bags_per_microbatch):
+            last = min(first + self.bags_per_microbatch, number_of_bags)
+            bag_loss = gaussian_count_nll(
+                self.predict(images[first * self.bagsize:last * self.bagsize]),
+                proportions[first:last],
+                self.bagsize,
+                self.count_variance_floor,
+            )
+            weight = (last - first) / number_of_bags
+            (bag_loss * weight).backward()
+            loss_value += bag_loss.detach().item() * weight
+        self.optimizer.step()
+        self.scheduler.step()
+        return {"loss": loss_value}
 
 
 class LLP_MM(Algorithm):
@@ -1414,7 +1465,9 @@ class EasyLLP(Algorithm):
 
     @staticmethod
     def _apply_flooding(loss: torch.Tensor, b: float) -> torch.Tensor:
-        if b <= 0:
+        # b=0 is the absolute-risk correction used by the ABS baselines.
+        # Preserve the historical negative-threshold no-op behavior.
+        if b < 0:
             return loss
         return (loss - b).abs() + b
 
@@ -1547,7 +1600,9 @@ class GeneralUPM(Algorithm):
 
     @staticmethod
     def _apply_flooding(loss: torch.Tensor, b: float) -> torch.Tensor:
-        if b <= 0:
+        # b=0 is the absolute-risk correction used by the ABS baselines.
+        # Preserve the historical negative-threshold no-op behavior.
+        if b < 0:
             return loss
         return (loss - b).abs() + b
 

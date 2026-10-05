@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llp-mm"
+version = "0.2.0.dev0"
+description = "Moment matching for learning from label proportions: research reproduction candidate"
+requires-python = ">=3.11"
+license-files = ["third_party/licenses/*.txt"]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+where = [".", "src"]
+include = ["plench*", "reproduction*", "mo_matching*"]
+exclude = ["plench.tests*", "tests*", "src*", "reproduction.upstream*"]
+namespaces = true
+
+[tool.setuptools.package-data]
+plench = ["configs/**/*.json", "data_dir/cluster_maps/*.npz"]
+
+[tool.pytest.ini_options]
+testpaths = ["plench/tests", "tests"]
+pythonpath = [".", "src"]
+addopts = "-ra"

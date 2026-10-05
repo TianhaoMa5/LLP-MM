@@ -154,6 +154,8 @@ def _hparams(algorithm, dataset, random_seed):
             _hparam('moment_compute_dtype', 'float64', lambda r: 'float64')
             _hparam('moment_ce_smoothing_tau', 1e-4, lambda r: 1e-4)
             _hparam('order_weights', None, lambda r: None)
+    elif algorithm == 'LLP_Gaussian':
+        _hparam('gaussian_count_variance_floor', 1.0 / 12.0, lambda r: 1.0 / 12.0)
     elif algorithm == 'LLP_DSQ':
         # COLT 2024 Appendix G uses beta=0.99 for the streaming approximation
         # of the full-training-set prediction mean.
