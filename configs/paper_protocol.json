@@ -110,6 +110,7 @@
     "LLP-MM": {
       "algorithm": "LLP_MM",
       "hparams": {
+        "moment_implementation": "paper_image",
         "moment_loss_type": "ce",
         "moment_algorithm": "stable_dp",
         "moment_compute_dtype": "float64",
@@ -159,9 +160,9 @@
       "The original complete per-seed raw results and source revisions have not been recovered and linked for every table cell.",
       "Historical bag assignments and shared manifest checksums have not been validated across all methods. Current deterministic loaders construct bags from the selected seed.",
       "The legacy base optimizer default is Adam. This reconstruction explicitly requests SGD to match the manuscript; it does not certify the optimizer used by every historical run.",
-      "The historical EasyLLP/GeneralUPM flooding helper returned the raw loss at b=0. The corrected release applies abs(loss) when flooding is enabled; historical ABS rows require new numerical validation.",
+      "The initial release copy disabled flooding at b=0; the original supplementary source correctly applied absolute loss. Source provenance must be checked per run.",
       "FlowLLP builds its own SGD optimizer and scheduler with Nesterov enabled, warmup_fraction=0.08 and warmup_ratio=5e-5/lr; these inherited method settings are recorded explicitly.",
-      "LLP-MM uses the current strict float64 stable-DP CE implementation with smoothing tau=1e-4; equality to every historical training revision is unverified.",
+      "Synthetic image LLP-MM explicitly selects paper_image: the fixed-bag LLPHighOrderLoss restored from the supplied supplementary source. Natural-bag experiments retain their separate variable-bag implementation. Equality to all historical runtime revisions remains unverified.",
       "Dataset-free tests validate planning and implementation behavior, not the final paper accuracies.",
       "Cluster-bag index alignment and RNG seeding were corrected in this candidate. Historical Cluster results need new numerical verification, including miniImageNet full-population-map projection."
     ]

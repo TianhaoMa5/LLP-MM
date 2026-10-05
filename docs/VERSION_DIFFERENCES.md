@@ -50,6 +50,23 @@ reproduction claim. A pilot diagnoses behavior but does not validate an entire
 paper grid. Seeding the corrected implementation does not reconstruct old bags
 created with an unseeded Generator.
 
+## Corrected Cluster rerun protocol
+
+The image-table rerun explicitly selects `moment_implementation=paper_image` for
+LLP-MM. This dispatches to the supplementary archive's restored
+`LLPHighOrderLoss` implementation, with CE and uniform weights over orders
+1 through 8 for CIFAR-10 and 1 through 3 for CIFAR-100/miniImageNet. The separate
+variable-bag implementation remains available for natural-bag studies. The
+dispatch has a loss-and-gradient regression check against the supplementary
+criterion. This distinction matters for runtime and historical source fidelity.
+
+`scripts/cluster_rerun.py` prepares and verifies frozen bag manifests before
+training. Manifests contain original image-row indices and class proportions,
+and their canonical content digest can be checked across machines. A mismatch
+aborts training. The rerun writes source hashes, package versions, full commands,
+GPU information and a validated completion record. Short smoke outputs are
+stored separately and are never counted as 500-epoch results.
+
 Thus, the candidate repairs concrete defects in the code prepared for release.
 The effect on paper results remains a **per-run source-provenance question**.
 Retrieve the runtime source revision and bag manifest before deciding which

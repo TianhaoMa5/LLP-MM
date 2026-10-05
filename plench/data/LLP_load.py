@@ -457,7 +457,10 @@ def _cluster_ids_for_training_samples(
     return clusters[shuffled_indices]
 
 
-def load_data_train(pi,bag_build,num_classes, holdout_fraction, dataset="CIFAR10", dspth="./data", bagsize=16, backbone=None, seed=0):
+def load_data_train(pi,bag_build,num_classes, holdout_fraction, dataset="CIFAR10", dspth="./data", bagsize=16, backbone=None, seed=0, cluster_manifest=None):
+    if cluster_manifest is not None and (bag_build != 'cluster' or dataset not in {'CIFAR10', 'CIFAR100', 'miniImageNet'}):
+        raise ValueError('Frozen Cluster manifests support the three paper image datasets only')
+    cluster_map_digests = []
     input_dim = 1
     if dataset == "CIFAR10":
         datalist = [osp.join(dspth, "cifar-10-batches-py", "data_batch_{}".format(i + 1)) for i in range(5)]
@@ -725,10 +728,21 @@ def load_data_train(pi,bag_build,num_classes, holdout_fraction, dataset="CIFAR10
             clusters_all = np.array(_cluster_list, dtype=np.int64)
             cluster_metadata, cluster_map_indices = None, None
         else:
-            with np.load(_find_cluster_npz(dspth, dataset), allow_pickle=False) as z:
+            cluster_map_path = _find_cluster_npz(dspth, dataset)
+            if cluster_manifest is not None:
+                import hashlib
+                from pathlib import Path
+                cluster_map_digests.append(hashlib.sha256(Path(cluster_map_path).read_bytes()).hexdigest())
+            with np.load(cluster_map_path, allow_pickle=False) as z:
                 clusters_all = z["clusters"]
                 cluster_metadata = json.loads(z["meta"].item()) if "meta" in z else None
                 cluster_map_indices = z["indices"] if "indices" in z else None
+                if "labels" in z:
+                    map_labels = z["labels"]
+                    if dataset == 'miniImageNet' and len(map_labels) != dataset_length:
+                        map_labels = map_labels.reshape(-1, 600)[:, :500].reshape(-1)
+                    if len(map_labels) != dataset_length or not np.array_equal(map_labels[random_indices], labels):
+                        raise ValueError('Cluster map/image label alignment failed')
 
         aligned_clusters = _cluster_ids_for_training_samples(
             clusters_all, dataset=dataset, dataset_length=dataset_length,
@@ -1141,6 +1155,24 @@ def load_data_train(pi,bag_build,num_classes, holdout_fraction, dataset="CIFAR10
             var_data_u_1 = (data, var_data_u_1)
             var_data_u_2 = (data, var_data_u_2)
     # 7) 返回两组（每组结构跟你原来一致）
+    if cluster_manifest is not None:
+        from .cluster_manifest import freeze_cluster_manifest
+        def source_bags(bags):
+            compact = random_indices[np.asarray(bags, dtype=np.int64).reshape(-1, bagsize)]
+            return (compact // 500) * 600 + compact % 500 if dataset == 'miniImageNet' else compact
+        freeze_cluster_manifest(
+            cluster_manifest,
+            metadata={"schema_version": 1, "dataset": dataset, "seed": int(seed),
+                      "pi": float(pi), "bag_size": int(bagsize),
+                      "holdout_fraction": float(holdout_fraction),
+                      "num_classes": int(num_classes), "training_population": int(dataset_length),
+                      "cluster_map_sha256": sorted(set(cluster_map_digests)),
+                      "source_index_space": 'merged_600_blocks' if dataset == 'miniImageNet' else 'original_train_rows'},
+            train_indices=source_bags(var_labels_idx_1),
+            val_indices=source_bags(var_labels_idx_2),
+            train_proportions=np.asarray(var_label_prob_1).reshape(-1, num_classes),
+            val_proportions=np.asarray(var_label_prob_2).reshape(-1, num_classes),
+        )
     var_pack_1 = (var_data_u_1, var_label_prob_1, var_labels_real_1, var_labels_idx_1, dataset_length, var_indices_u_1, input_dim)
     # holdout_fraction=0 时 var_bag_ids_2 为空，val loader 无法构造；直接复用 train pack
     if holdout_fraction == 0.0:
@@ -1326,7 +1358,8 @@ def get_train_loader(pi,bag_build,classes, holdout_fraction, dataset, batch_size
                      train_instance_sample_size=None, num_reviewers=None,
                      cluster_seed=0, target_avg_bag_size=None,
                      ku_merge_validation_into_train=False,
-                     ku_unknown_bag_max_size=None, ku_unknown_bag_seed=0):
+                     ku_unknown_bag_max_size=None, ku_unknown_bag_seed=0,
+                     cluster_manifest=None):
     if is_fed_isic2019_dataset(dataset):
         if bag_build != "feature":
             raise ValueError(
@@ -1666,7 +1699,7 @@ def get_train_loader(pi,bag_build,classes, holdout_fraction, dataset, batch_size
     train_pack, var_pack, prior_train, prior_val, prior_all = load_data_train(
         pi, bag_build, classes, holdout_fraction,
         dataset=dataset, dspth=root, bagsize=bag_size, backbone=backbone,
-        seed=seed,
+        seed=seed, cluster_manifest=cluster_manifest,
     )
 
     data_u, label_prob, labels, label_idx, dataset_length, indices_u, input_dim = train_pack
@@ -1710,7 +1743,7 @@ def get_train_loader(pi,bag_build,classes, holdout_fraction, dataset, batch_size
     sampler_u = RandomSampler(ds_u, replacement=False)
     batch_sampler_u = BatchSampler(sampler_u, batch_size, drop_last=True)
     dl_u = torch.utils.data.DataLoader(
-        ds_u, batch_sampler=batch_sampler_u, num_workers=16, pin_memory=True
+        ds_u, batch_sampler=batch_sampler_u, num_workers=num_workers, pin_memory=True
     )
 
     # --- build var ds ---
@@ -1751,7 +1784,7 @@ def get_train_loader(pi,bag_build,classes, holdout_fraction, dataset, batch_size
     sampler_u_var = RandomSampler(ds_u_var, replacement=False)
     batch_sampler_u_var = BatchSampler(sampler_u_var, batch_size, drop_last=True)
     dl_u_var = torch.utils.data.DataLoader(
-        ds_u_var, batch_sampler=batch_sampler_u_var, num_workers=16, pin_memory=True
+        ds_u_var, batch_sampler=batch_sampler_u_var, num_workers=num_workers, pin_memory=True
     )
 
     # dataset_length / input_dim 两边一般一样；想严谨就返回两份

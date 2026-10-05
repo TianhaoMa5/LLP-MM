@@ -151,6 +151,8 @@ if __name__ == "__main__":
     parser.add_argument('--skip-final-test', action='store_true',
                         help='Skip instance-level final test evaluation for short diagnostic runs')
     parser.add_argument('--num-workers', type=int, default=4)
+    parser.add_argument('--cluster-manifest', type=str, default=None,
+                        help='Create once or verify identical Cluster bag identities before training')
 
     if config_args.config:
         with open(config_args.config, encoding='utf-8') as config_file:
@@ -435,7 +437,13 @@ if __name__ == "__main__":
         ku_merge_validation_into_train=args.ku_merge_validation_into_train,
         ku_unknown_bag_max_size=args.ku_unknown_bag_max_size,
         ku_unknown_bag_seed=args.ku_unknown_bag_seed,
+        cluster_manifest=args.cluster_manifest,
     )
+    if args.cluster_manifest is not None:
+        with np.load(args.cluster_manifest, allow_pickle=False) as manifest:
+            args.cluster_manifest_sha256 = str(manifest['sha256'].item())
+        with open(os.path.join(args.output_dir, 'cluster_manifest.json'), 'w') as handle:
+            json.dump({'path': args.cluster_manifest, 'sha256': args.cluster_manifest_sha256}, handle, indent=2)
     if is_ku_optofil_dataset(args.dataset) and args.ku_unknown_bag_max_size is not None:
         assignment_manifest = {
             'mode': 'known_patient_bags_plus_synthetic_unknown_subbags',

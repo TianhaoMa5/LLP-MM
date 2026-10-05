@@ -532,6 +532,9 @@ class LLP_MM(Algorithm):
     def __init__(self, epochs, input_shape, train_givenY, hparams, bagsize):
         super().__init__(epochs, input_shape, train_givenY, hparams, bagsize)
         self.order = int(hparams.get("order", 3))
+        self.moment_implementation = str(hparams.get("moment_implementation", "variable_bag"))
+        if self.moment_implementation not in {"variable_bag", "paper_image"}:
+            raise ValueError("Unknown LLP-MM moment_implementation")
         self.moment_loss_type = str(hparams.get("moment_loss_type", "ce"))
         self.moment_algorithm = str(hparams.get("moment_algorithm", "stable_dp"))
         self.moment_compute_dtype = str(
@@ -566,11 +569,25 @@ class LLP_MM(Algorithm):
         ):
             raise ValueError("LLP_MM order_weights must be finite and non-negative")
 
+        if self.moment_implementation == "paper_image":
+            from .order import LLPHighOrderLoss
+            self.paper_image_criterion = LLPHighOrderLoss(
+                C=self.num_classes, max_order=self.order, bag_size=bagsize,
+                loss_type="ce", weight_mode="uniform",
+                order_weights=self.order_weights, reduce="mean",
+            )
+
     def update(self, minibatches):
         from ..data.ref2021 import _llp_mm_variable_loss
 
         x, proportions = minibatches
         logits = self.predict(x)
+        if self.moment_implementation == "paper_image":
+            # Match the fixed-image implementation shipped in the supplement.
+            loss = self.paper_image_criterion(
+                proportions.to(device=logits.device), F.softmax(logits, dim=1)
+            )
+            return self._backward_step(loss)
         proportions = proportions.to(device=logits.device, dtype=logits.dtype)
         number_of_bags = int(proportions.shape[0])
         if number_of_bags <= 0 or logits.shape[0] != number_of_bags * int(self.bagsize):
