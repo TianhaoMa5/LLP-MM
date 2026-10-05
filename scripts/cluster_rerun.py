@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import importlib.metadata
 import json
+import math
 import os
 from pathlib import Path
 import socket
@@ -20,6 +21,24 @@ def inventory():
     paths = sorted(set(REPO_ROOT.glob('plench/**/*.py')) | set(REPO_ROOT.glob('src/**/*.py')) |
                    set(REPO_ROOT.glob('scripts/*.py')) | set(REPO_ROOT.glob('configs/*.json')))
     return {str(p.relative_to(REPO_ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
+
+
+def valid_result_rows(rows, expected_epochs):
+    """Reject truncated training and nonfinite recorded numerical metrics."""
+    if not rows or rows[-1].get('args', {}).get('epochs') != expected_epochs:
+        return False
+    if rows[-1].get('epoch', -1) < expected_epochs - 1:
+        return False
+    for row in rows:
+        for required in ('loss', 'test_acc', 'epoch', 'step'):
+            if required not in row or not math.isfinite(float(row[required])):
+                return False
+        for key, value in row.items():
+            if isinstance(value, (int, float)) and not math.isfinite(value):
+                return False
+        if not 0 <= row['test_acc'] <= 1:
+            return False
+    return True
 
 
 def main():
@@ -93,7 +112,7 @@ def main():
     if result.returncode == 0 and (output/'done').is_file():
         rows = [json.loads(line) for line in (output/'results.jsonl').read_text().splitlines() if line.strip()]
         expected_epochs = int(command[command.index('--epochs')+1])
-        if rows and rows[-1]['args']['epochs'] == expected_epochs and rows[-1]['epoch'] >= expected_epochs - 1:
+        if valid_result_rows(rows, expected_epochs):
             status.update(validated=True, final_test_acc=rows[-1]['test_acc'], last_epoch=rows[-1]['epoch'])
     (output/'status.json').write_text(json.dumps(status,indent=2)+'\n')
     print(json.dumps({'run_id':run['run_id'], **status}), flush=True)

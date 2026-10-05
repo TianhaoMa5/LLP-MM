@@ -1,6 +1,7 @@
 import argparse
 import collections
 import json
+import math
 import os
 
 # HuggingFace tokenizers + DataLoader fork: avoid deadlock warnings
@@ -810,6 +811,12 @@ if __name__ == "__main__":
 
             checkpoint_vals['step_time'].append(time.time() - step_start_time)
         for key, val in step_vals.items():
+            if args.cluster_manifest and key == 'loss' and not math.isfinite(float(val)):
+                failure = {'reason': 'nonfinite_training_loss', 'step': step,
+                           'metric': key, 'value': str(val)}
+                with open(os.path.join(args.output_dir, 'numerical_failure.json'), 'w') as f:
+                    json.dump(failure, f, indent=2)
+                raise FloatingPointError(f'Cluster rerun stopped: {failure}')
             checkpoint_vals[key].append(val)
 
 
