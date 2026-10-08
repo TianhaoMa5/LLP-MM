@@ -1,16 +1,18 @@
-# Attribution and release status
+# Attribution and licenses
 
-This candidate extends the original `TianhaoMa5/LLP-MM` repository. It assigns
-no blanket license to inherited research implementations. Before a public release,
-confirm the intended project license and preserve applicable upstream notices.
+The [MIT License](LICENSE) covers the authors' original project code and
+contributions. It does not replace third-party licenses or copyright notices.
+Raw datasets and pretrained checkpoints are not bundled.
 
-| Component | Provenance | Notice status |
+| Component | Source | Notice |
 | --- | --- | --- |
-| LLP-MM / PLeNCH and baseline adapters | Original release commit `03e3d21832d8227b77cabfb9cbe5906e5259160a`, selected research sources, historical moment kernel | No blanket license was found in the original release; authorship and intended license need confirmation |
-| FlowLLP particle-flow routine | [arakotom/flowllp](https://github.com/arakotom/flowllp), reference `aac782b985dde19b0f3591c87084effc2977afaa` | MIT notice retained in [FlowLLP-MIT.txt](third_party/licenses/FlowLLP-MIT.txt) |
-| LLP-GAN PyTorch port | Reference [liujiabin008/LLP-GAN](https://github.com/liujiabin008/LLP-GAN), revision prefix `0bdf442` | Original TensorFlow repo is not bundled. No upstream license file was found; clarify inherited-code permissions and port authorship before assigning a license |
-| Dependencies | Installed from their own distributions | Their own license notices apply |
-| Cluster maps | Retained research artifacts, without images | Dataset/provenance terms need separate review |
+| Benchmark infrastructure lineage | [PLeNCH](https://github.com/wwangwitsel/PLENCH), based on [DomainBed](https://github.com/facebookresearch/DomainBed) | [DomainBed-MIT.txt](third_party/licenses/DomainBed-MIT.txt). This notice covers DomainBed material, not independently authored PLeNCH changes. |
+| FlowLLP particle-flow routine | [arakotom/flowllp](https://github.com/arakotom/flowllp), revision `aac782b985dde19b0f3591c87084effc2977afaa` | [FlowLLP-MIT.txt](third_party/licenses/FlowLLP-MIT.txt) |
+| DenseNet source | [bearpaw/pytorch-classification](https://github.com/bearpaw/pytorch-classification) | [pytorch-classification.txt](third_party/licenses/pytorch-classification.txt), MIT |
+| Torchvision ResNet lineage | [pytorch/vision](https://github.com/pytorch/vision) | [torchvision-BSD.txt](third_party/licenses/torchvision-BSD.txt), BSD-3-Clause |
+| LLP-GAN method reference | [liujiabin008/LLP-GAN](https://github.com/liujiabin008/LLP-GAN), revision prefix `0bdf442` | Original TensorFlow sources are not bundled. This repository contains the project authors' PyTorch implementation; the upstream repository has no license file and is not relicensed here. |
+| Cluster assignment artifacts | Retained assignments, without images | Original dataset terms apply separately. |
 
-Raw datasets and pretrained checkpoints are acquired separately. The FlowLLP MIT
-notice is retained without modifying its text.
+Optional inherited adapters retain their attribution. The project license does
+not grant additional rights to independently authored, unlicensed upstream
+material. Dependencies retain licenses from their own distributions.

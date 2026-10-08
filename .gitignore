@@ -36,3 +36,7 @@ dist/
 *.jsonl
 
 !plench/data_dir/cluster_maps/*.npz
+
+# Recreated order-study figures
+/figures/order_study/*.pdf
+/figures/order_study/*.png

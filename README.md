@@ -1,133 +1,121 @@
 # LLP-MM
 
 Research code for **Rethinking Learning from Label Proportions via Moment Matching**.
-This branch extends the original LLP-MM release to the manuscript snapshot audited on
-2026-10-05: eleven comparison methods, LLP-GAN and MM+GAN, portable launchers,
-and explicitly labelled archived evidence.
+LLP-MM, eleven comparison methods, LLP-GAN/MM+GAN, portable experiment launchers,
+and checked result extracts are included.
 
-**Reproduction candidate: every paper result has not yet been reproduced.**
-The scope is 1,188 synthetic-image runs, 72 CIFAR-10 GAN runs, and 33 KU runs,
-plus the order/runtime study. See [paper coverage](docs/PAPER_COVERAGE.md) for
-the table-to-code mapping and missing evidence. Historical ABS results need
-revalidation after a loss correction. The order/runtime raw data and plotting
-program have not been recovered.
+## Install
 
-## Install and verify
-
-Run commands from the repository root. Python 3.11 is tested. Full training
-requires a PyTorch build appropriate for your CUDA system.
+Python 3.11 is tested. Full training requires a suitable CUDA PyTorch build.
 
 ```bash
+git clone https://github.com/TianhaoMa5/LLP-MM.git
+cd LLP-MM
 python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e .
 python -m pytest -q
-python -m plench.train --help
+```
+
+No private parent checkout is needed. See [dataset preparation](docs/DATASETS.md).
+Raw images and pretrained checkpoints are acquired separately.
+
+## Checked results
+
+The corrected Cluster grid is complete: **396 configurations, 330 normal
+500-epoch completions, 66 verified numerical divergences, zero missing**.
+The published table uses each run's maximum finite logged test accuracy,
+including saved maxima before divergence. Divergence remains explicitly recorded.
+
+```bash
+python scripts/summarize_cluster.py --check
+python scripts/summarize_cluster.py
 python scripts/summarize_paper_evidence.py --check
 ```
 
-Installation includes `plench`, `reproduction`, and the `mo_matching` moment-loss
-dependency. No private parent checkout or cluster account is required.
-[REPRODUCIBILITY.md](REPRODUCIBILITY.md) records validation and its limitations.
-Full training needs separately obtained datasets and GPU time.
+- [Cluster per-run results and metric histories](results/cluster_best_runs.json)
+- [Cluster table: mean and sample standard deviation](results/cluster_best_summary.csv)
+- [Completion counts](results/cluster_completion.json)
+- [GAN per-seed results](results/gan_cifar10_runs.json)
+- [KU paper summary](results/ku_paper_summary.csv)
+- [Order-study inputs and plotting program](figures/order_study)
 
-## Synthetic image tables
+Cluster selects peak **test accuracy**; KU selects peak **test Macro-F1**.
+These preserve the paper convention, rather than validation-only selection.
+The order figure retains the original runtime curve, without treating new
+concurrent measurements as comparable single-GPU timings.
+See [current evidence](docs/CURRENT_RESULTS.md).
 
-Prepare [datasets and cluster maps](docs/DATASETS.md), then inspect the matrix:
+## Image experiments
 
 ```bash
+# List the 1,188-run image matrix without training.
 python scripts/reproduce_paper.py --list
-python scripts/reproduce_paper.py \
-  --dataset CIFAR10 --method LLP-MM --bag-mode random --bag-size 16 --seed 0 \
+
+# Print one training command; add --run to execute.
+python scripts/reproduce_paper.py --dataset CIFAR10 --method LLP-MM \
+  --bag-mode random --bag-size 16 --seed 0 \
   --data-root ./data --output-root ./outputs/paper
 ```
 
-Add `--run` to execute. All three launchers print a plan by default, execute
-sequentially when requested, stop on failure, and refuse existing run directories.
-Use a compute node or suitable workstation; scheduler submission is the caller's
-responsibility.
+[paper_protocol.json](configs/paper_protocol.json) fixes 500 epochs, 1,024
+images/update, optimizers, backbones and MM orders 8/3/3. Fixed-image runs use
+`paper_image`; natural KU bags use float64 stable DP. Do not interchange these
+kernels when comparing historical timings.
 
-[paper_protocol.json](configs/paper_protocol.json) explicitly fixes SGD, 500 epochs,
-1,024 images/update, PVC's learning rate, and LLP-MM orders 8/3/3. It distinguishes
-manuscript parameters from inherited implementation choices. This is a reconstructed
-protocol; original source/config/result records remain incomplete.
+Prepare frozen Cluster manifests on an allocated compute node. All methods in a
+condition share the same manifest:
 
-## GAN compatibility
+```bash
+python scripts/cluster_rerun.py --prepare CIFAR10 \
+  --data-root ./data --output-root ./outputs/cluster
+python scripts/cluster_rerun.py --list \
+  --data-root ./data --output-root ./outputs/cluster
+python scripts/cluster_rerun.py --index 30 --smoke \
+  --data-root ./data --output-root ./outputs/cluster
+python scripts/cluster_rerun.py --index 30 \
+  --data-root ./data --output-root ./outputs/cluster
+```
 
-Generate shared CIFAR-10 manifests following [DATASETS.md](docs/DATASETS.md):
+Repeat preparation for CIFAR100 and miniImageNet. The runner verifies manifest
+content, records source/environment hashes, refuses existing outputs and stops
+on nonfinite loss. Divergence and infrastructure failures remain distinct.
+Smoke outputs are stored separately.
+
+For an order ablation, use an isolated output directory:
+
+```bash
+python scripts/reproduce_paper.py --dataset CIFAR10 --method LLP-MM \
+  --bag-mode cluster --bag-size 16 32 64 128 --seed 0 --order 13
+python -m pip install -e '.[plot]'
+python figures/order_study/plot.py
+```
+
+The figure uses PM for order one. The bag128/order2 value 71.91% is explicitly
+recorded as a user-reported rerun without supplied raw evidence.
+
+## GAN and KU
 
 ```bash
 python scripts/reproduce_gan.py --method MM+GAN --bag-mode cluster \
   --bag-size 32 --seed 0 --data-root ./data --bag-root ./data/bags/cifar10
-```
-
-Add `--run` to execute. Both methods consume the same manifests. Preflight checks
-dataset, seed, bag size, mode, concentration, complete population size and unique
-indices. Alpha-first requires concentration 10. New manifest file hashes are
-recorded. MM+GAN explicitly selects the restored historical `paper_dp` kernel.
-
-The [72 archived records](results/gan_cifar10_runs.json) regenerate
-[24 aggregate rows](results/gan_cifar10_summary.csv):
-
-```bash
-python scripts/summarize_paper_evidence.py
-```
-
-These are archived observations, not newly trained results. Metadata distinguishes
-retained result fields from companion audit evidence and records the uncertain
-byte scope of archived bag hashes.
-
-## KU-Optofil PBC
-
-```bash
 python -m plench.scripts.prepare_ku_optofil_pbc --data-root ./data/ku_optofil_pbc
-python scripts/reproduce_ku.py --method LLP-MM --seed 0 \
-  --data-root ./data/ku_optofil_pbc --output-root ./outputs/ku
+python scripts/reproduce_ku.py --method LLP-MM --seed 0
+
+# Omitting --seed plans all three seeds. Default MM order is eight.
+python scripts/reproduce_ku.py --method LLP-MM --order 3
+python scripts/reproduce_ku.py --method LLP-MM --order 5
 ```
 
-Add `--run` to execute; omit method/seed filters to plan all 33 runs. This fixes
-100 epochs, ImageNet-pretrained standard-stem ResNet-18, Adam, five warmup epochs,
-and label-independent unknown-patient splitting. Older generic KU configs remain
-historical examples, not the paper recipe.
+Commands plan by default; add `--run` to train. GAN methods share canonical NPZ
+bags. KU uses 100 epochs and label-independent unknown-patient grouping.
+[REPRODUCIBILITY.md](REPRODUCIBILITY.md) records validation;
+[VERSION_DIFFERENCES.md](docs/VERSION_DIFFERENCES.md) explains historical fixes.
+Other inherited adapters are extensions, not additional completed paper runs.
 
-After completing all runs:
+## License
 
-```bash
-python scripts/summarize_ku.py ./outputs/ku --output ./outputs/ku_summary.csv
-```
-
-The paper selects maximum **test Macro-F1**, takes all four metrics at that epoch,
-and uses population standard deviation. The collector preserves this convention,
-checks the scientific settings and all 100 epochs, and rejects incomplete runs.
-This is not validation-set selection. The included [KU CSV](results/ku_paper_summary.csv)
-is aggregate-only; one of the 33 historical epoch logs has been recovered as a sanitized metric extract.
-
-## Corrections affecting historical results
-
-- EasyLLP/GeneralUPM with flooding enabled at threshold zero now apply absolute
-  loss. The old helper returned the original loss.
-- FlowLLP honors explicit optimizer and scheduling settings; the old implementation
-  silently constructed SGD with a fixed schedule.
-- The image-table launcher explicitly uses SGD instead of the generic Adam default.
-- Cluster assignments are aligned with shuffled sample identities and the miniImageNet
-  training subset; cluster bag sampling uses the configured seed. The legacy loader
-  misaligned these indices and created an unseeded random generator.
-
-Tests verify these behaviors. Historical numerical results still require reruns
-or comparison with their original runtime sources.
-
-## Earlier release and attribution
-
-The earlier Fed-ISIC2019 experiment remains under
-`scripts/run_fed_isic2019_seed.sh`, its existing configs and
-[dataset instructions](plench/README_FED_ISIC2019.md). It is outside the audited
-current manuscript. Other inherited adapters are extensions, not additional
-completed paper experiments.
-
-[THIRD_PARTY.md](THIRD_PARTY.md) records attribution and unresolved licensing
-provenance. This candidate does not assign a blanket license to inherited code.
-
-Additional source recovery: [RECOVERED_LOGS.md](docs/RECOVERED_LOGS.md) records 12/1,188 main-table run logs and 1/33 KU logs, with source hashes and independently checked aggregates.
-
-Version clarification: the original experiment ABS helper and an existing packaged Cluster loader already implement the intended behavior. The corrections above apply to the inspected release copy; historical-run impact must be checked against actual runtime sources. See [VERSION_DIFFERENCES.md](docs/VERSION_DIFFERENCES.md).
+Original project code and the authors' changes use the [MIT License](LICENSE).
+Third-party components retain their own licenses and notices; see
+[THIRD_PARTY.md](THIRD_PARTY.md). Dataset licenses are separate.

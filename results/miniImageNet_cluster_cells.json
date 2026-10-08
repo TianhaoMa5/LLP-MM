@@ -1,0 +1,706 @@
+[
+  {
+    "dataset": "miniImageNet",
+    "method": "PM",
+    "bag": 16,
+    "best_mean": 65.20666666666666,
+    "best_sample_std": 0.7614022152143569,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag16/PM/seed0",
+      "miniImageNet/cluster/bag16/PM/seed1",
+      "miniImageNet/cluster/bag16/PM/seed2"
+    ],
+    "average": 48.95333333333333,
+    "rank": 3
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "PM",
+    "bag": 32,
+    "best_mean": 56.36666666666667,
+    "best_sample_std": 0.10214368964029705,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag32/PM/seed0",
+      "miniImageNet/cluster/bag32/PM/seed1",
+      "miniImageNet/cluster/bag32/PM/seed2"
+    ],
+    "average": 48.95333333333333,
+    "rank": 3
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "PM",
+    "bag": 64,
+    "best_mean": 44.06333333333333,
+    "best_sample_std": 1.7807957023008916,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag64/PM/seed0",
+      "miniImageNet/cluster/bag64/PM/seed1",
+      "miniImageNet/cluster/bag64/PM/seed2"
+    ],
+    "average": 48.95333333333333,
+    "rank": 3
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "PM",
+    "bag": 128,
+    "best_mean": 30.176666666666666,
+    "best_sample_std": 0.8966790581547741,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag128/PM/seed0",
+      "miniImageNet/cluster/bag128/PM/seed1",
+      "miniImageNet/cluster/bag128/PM/seed2"
+    ],
+    "average": 48.95333333333333,
+    "rank": 3
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "DSQ",
+    "bag": 16,
+    "best_mean": 66.03,
+    "best_sample_std": 0.27055498516937654,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag16/DSQ/seed0",
+      "miniImageNet/cluster/bag16/DSQ/seed1",
+      "miniImageNet/cluster/bag16/DSQ/seed2"
+    ],
+    "average": 44.600833333333334,
+    "rank": 4
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "DSQ",
+    "bag": 32,
+    "best_mean": 55.79,
+    "best_sample_std": 1.3639648089302046,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag32/DSQ/seed0",
+      "miniImageNet/cluster/bag32/DSQ/seed1",
+      "miniImageNet/cluster/bag32/DSQ/seed2"
+    ],
+    "average": 44.600833333333334,
+    "rank": 4
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "DSQ",
+    "bag": 64,
+    "best_mean": 37.02333333333333,
+    "best_sample_std": 2.74585748598381,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag64/DSQ/seed0",
+      "miniImageNet/cluster/bag64/DSQ/seed1",
+      "miniImageNet/cluster/bag64/DSQ/seed2"
+    ],
+    "average": 44.600833333333334,
+    "rank": 4
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "DSQ",
+    "bag": 128,
+    "best_mean": 19.56,
+    "best_sample_std": 0.1452583904633391,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag128/DSQ/seed0",
+      "miniImageNet/cluster/bag128/DSQ/seed1",
+      "miniImageNet/cluster/bag128/DSQ/seed2"
+    ],
+    "average": 44.600833333333334,
+    "rank": 4
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "LLP-PVC",
+    "bag": 16,
+    "best_mean": 58.77,
+    "best_sample_std": 0.3897435053980937,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag16/LLP-PVC/seed0",
+      "miniImageNet/cluster/bag16/LLP-PVC/seed1",
+      "miniImageNet/cluster/bag16/LLP-PVC/seed2"
+    ],
+    "average": 38.62166666666667,
+    "rank": 7
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "LLP-PVC",
+    "bag": 32,
+    "best_mean": 52.49666666666666,
+    "best_sample_std": 1.0996514599332545,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag32/LLP-PVC/seed0",
+      "miniImageNet/cluster/bag32/LLP-PVC/seed1",
+      "miniImageNet/cluster/bag32/LLP-PVC/seed2"
+    ],
+    "average": 38.62166666666667,
+    "rank": 7
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "LLP-PVC",
+    "bag": 64,
+    "best_mean": 27.91,
+    "best_sample_std": 8.106682428712746,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag64/LLP-PVC/seed0",
+      "miniImageNet/cluster/bag64/LLP-PVC/seed1",
+      "miniImageNet/cluster/bag64/LLP-PVC/seed2"
+    ],
+    "average": 38.62166666666667,
+    "rank": 7
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "LLP-PVC",
+    "bag": 128,
+    "best_mean": 15.31,
+    "best_sample_std": 1.0209309477138995,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag128/LLP-PVC/seed0",
+      "miniImageNet/cluster/bag128/LLP-PVC/seed1",
+      "miniImageNet/cluster/bag128/LLP-PVC/seed2"
+    ],
+    "average": 38.62166666666667,
+    "rank": 7
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "LLP-FC",
+    "bag": 16,
+    "best_mean": 65.53333333333335,
+    "best_sample_std": 0.6226823695378971,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag16/LLP-FC/seed0",
+      "miniImageNet/cluster/bag16/LLP-FC/seed1",
+      "miniImageNet/cluster/bag16/LLP-FC/seed2"
+    ],
+    "average": 49.127500000000005,
+    "rank": 2
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "LLP-FC",
+    "bag": 32,
+    "best_mean": 56.413333333333334,
+    "best_sample_std": 0.6123180001709302,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag32/LLP-FC/seed0",
+      "miniImageNet/cluster/bag32/LLP-FC/seed1",
+      "miniImageNet/cluster/bag32/LLP-FC/seed2"
+    ],
+    "average": 49.127500000000005,
+    "rank": 2
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "LLP-FC",
+    "bag": 64,
+    "best_mean": 44.263333333333335,
+    "best_sample_std": 1.0071908127725013,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag64/LLP-FC/seed0",
+      "miniImageNet/cluster/bag64/LLP-FC/seed1",
+      "miniImageNet/cluster/bag64/LLP-FC/seed2"
+    ],
+    "average": 49.127500000000005,
+    "rank": 2
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "LLP-FC",
+    "bag": 128,
+    "best_mean": 30.3,
+    "best_sample_std": 1.0703737664946786,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag128/LLP-FC/seed0",
+      "miniImageNet/cluster/bag128/LLP-FC/seed1",
+      "miniImageNet/cluster/bag128/LLP-FC/seed2"
+    ],
+    "average": 49.127500000000005,
+    "rank": 2
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "ROT",
+    "bag": 16,
+    "best_mean": 67.29333333333334,
+    "best_sample_std": 0.39513710700633237,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag16/ROT/seed0",
+      "miniImageNet/cluster/bag16/ROT/seed1",
+      "miniImageNet/cluster/bag16/ROT/seed2"
+    ],
+    "average": 44.305,
+    "rank": 5
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "ROT",
+    "bag": 32,
+    "best_mean": 58.156666666666666,
+    "best_sample_std": 0.8727160668472508,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag32/ROT/seed0",
+      "miniImageNet/cluster/bag32/ROT/seed1",
+      "miniImageNet/cluster/bag32/ROT/seed2"
+    ],
+    "average": 44.305,
+    "rank": 5
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "ROT",
+    "bag": 64,
+    "best_mean": 33.94,
+    "best_sample_std": 1.8881737208212614,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag64/ROT/seed0",
+      "miniImageNet/cluster/bag64/ROT/seed1",
+      "miniImageNet/cluster/bag64/ROT/seed2"
+    ],
+    "average": 44.305,
+    "rank": 5
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "ROT",
+    "bag": 128,
+    "best_mean": 17.83,
+    "best_sample_std": 1.317307860752375,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag128/ROT/seed0",
+      "miniImageNet/cluster/bag128/ROT/seed1",
+      "miniImageNet/cluster/bag128/ROT/seed2"
+    ],
+    "average": 44.305,
+    "rank": 5
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "EasyLLP",
+    "bag": 16,
+    "best_mean": 1.0366666666666666,
+    "best_sample_std": 0.04725815626252613,
+    "normal_n": 0,
+    "divergence_n": 3,
+    "runs": [
+      "miniImageNet/cluster/bag16/EasyLLP/seed1",
+      "miniImageNet/cluster/bag16/EasyLLP/seed0",
+      "miniImageNet/cluster/bag16/EasyLLP/seed2"
+    ],
+    "average": 1.015,
+    "rank": 10
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "EasyLLP",
+    "bag": 32,
+    "best_mean": 1.01,
+    "best_sample_std": 0.010000000000000009,
+    "normal_n": 1,
+    "divergence_n": 2,
+    "runs": [
+      "miniImageNet/cluster/bag32/EasyLLP/seed2",
+      "miniImageNet/cluster/bag32/EasyLLP/seed0",
+      "miniImageNet/cluster/bag32/EasyLLP/seed1"
+    ],
+    "average": 1.015,
+    "rank": 10
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "EasyLLP",
+    "bag": 64,
+    "best_mean": 1.0066666666666666,
+    "best_sample_std": 0.005773502691896263,
+    "normal_n": 0,
+    "divergence_n": 3,
+    "runs": [
+      "miniImageNet/cluster/bag64/EasyLLP/seed0",
+      "miniImageNet/cluster/bag64/EasyLLP/seed1",
+      "miniImageNet/cluster/bag64/EasyLLP/seed2"
+    ],
+    "average": 1.015,
+    "rank": 10
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "EasyLLP",
+    "bag": 128,
+    "best_mean": 1.0066666666666666,
+    "best_sample_std": 0.005773502691896263,
+    "normal_n": 1,
+    "divergence_n": 2,
+    "runs": [
+      "miniImageNet/cluster/bag128/EasyLLP/seed0",
+      "miniImageNet/cluster/bag128/EasyLLP/seed1",
+      "miniImageNet/cluster/bag128/EasyLLP/seed2"
+    ],
+    "average": 1.015,
+    "rank": 10
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "EasyLLP-ABS",
+    "bag": 16,
+    "best_mean": 5.3133333333333335,
+    "best_sample_std": 0.07371114795832022,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag16/EasyLLP-ABS/seed0",
+      "miniImageNet/cluster/bag16/EasyLLP-ABS/seed1",
+      "miniImageNet/cluster/bag16/EasyLLP-ABS/seed2"
+    ],
+    "average": 3.453333333333333,
+    "rank": 8
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "EasyLLP-ABS",
+    "bag": 32,
+    "best_mean": 3.376666666666667,
+    "best_sample_std": 0.3288363321370272,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag32/EasyLLP-ABS/seed0",
+      "miniImageNet/cluster/bag32/EasyLLP-ABS/seed1",
+      "miniImageNet/cluster/bag32/EasyLLP-ABS/seed2"
+    ],
+    "average": 3.453333333333333,
+    "rank": 8
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "EasyLLP-ABS",
+    "bag": 64,
+    "best_mean": 2.8566666666666665,
+    "best_sample_std": 0.11930353445448852,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag64/EasyLLP-ABS/seed0",
+      "miniImageNet/cluster/bag64/EasyLLP-ABS/seed1",
+      "miniImageNet/cluster/bag64/EasyLLP-ABS/seed2"
+    ],
+    "average": 3.453333333333333,
+    "rank": 8
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "EasyLLP-ABS",
+    "bag": 128,
+    "best_mean": 2.2666666666666666,
+    "best_sample_std": 0.050332229568471505,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag128/EasyLLP-ABS/seed0",
+      "miniImageNet/cluster/bag128/EasyLLP-ABS/seed1",
+      "miniImageNet/cluster/bag128/EasyLLP-ABS/seed2"
+    ],
+    "average": 3.453333333333333,
+    "rank": 8
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "GeneralUPM",
+    "bag": 16,
+    "best_mean": 1.0366666666666666,
+    "best_sample_std": 0.04725815626252613,
+    "normal_n": 0,
+    "divergence_n": 3,
+    "runs": [
+      "miniImageNet/cluster/bag16/GeneralUPM/seed1",
+      "miniImageNet/cluster/bag16/GeneralUPM/seed0",
+      "miniImageNet/cluster/bag16/GeneralUPM/seed2"
+    ],
+    "average": 1.015,
+    "rank": 10
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "GeneralUPM",
+    "bag": 32,
+    "best_mean": 1.01,
+    "best_sample_std": 0.010000000000000009,
+    "normal_n": 1,
+    "divergence_n": 2,
+    "runs": [
+      "miniImageNet/cluster/bag32/GeneralUPM/seed2",
+      "miniImageNet/cluster/bag32/GeneralUPM/seed0",
+      "miniImageNet/cluster/bag32/GeneralUPM/seed1"
+    ],
+    "average": 1.015,
+    "rank": 10
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "GeneralUPM",
+    "bag": 64,
+    "best_mean": 1.0066666666666666,
+    "best_sample_std": 0.005773502691896263,
+    "normal_n": 2,
+    "divergence_n": 1,
+    "runs": [
+      "miniImageNet/cluster/bag64/GeneralUPM/seed0",
+      "miniImageNet/cluster/bag64/GeneralUPM/seed1",
+      "miniImageNet/cluster/bag64/GeneralUPM/seed2"
+    ],
+    "average": 1.015,
+    "rank": 10
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "GeneralUPM",
+    "bag": 128,
+    "best_mean": 1.0066666666666666,
+    "best_sample_std": 0.005773502691896263,
+    "normal_n": 1,
+    "divergence_n": 2,
+    "runs": [
+      "miniImageNet/cluster/bag128/GeneralUPM/seed0",
+      "miniImageNet/cluster/bag128/GeneralUPM/seed1",
+      "miniImageNet/cluster/bag128/GeneralUPM/seed2"
+    ],
+    "average": 1.015,
+    "rank": 10
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "GeneralUPM-ABS",
+    "bag": 16,
+    "best_mean": 5.3133333333333335,
+    "best_sample_std": 0.07371114795832022,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag16/GeneralUPM-ABS/seed0",
+      "miniImageNet/cluster/bag16/GeneralUPM-ABS/seed1",
+      "miniImageNet/cluster/bag16/GeneralUPM-ABS/seed2"
+    ],
+    "average": 3.4366666666666665,
+    "rank": 9
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "GeneralUPM-ABS",
+    "bag": 32,
+    "best_mean": 3.46,
+    "best_sample_std": 0.259422435421457,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag32/GeneralUPM-ABS/seed0",
+      "miniImageNet/cluster/bag32/GeneralUPM-ABS/seed1",
+      "miniImageNet/cluster/bag32/GeneralUPM-ABS/seed2"
+    ],
+    "average": 3.4366666666666665,
+    "rank": 9
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "GeneralUPM-ABS",
+    "bag": 64,
+    "best_mean": 2.78,
+    "best_sample_std": 0.18681541692269388,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag64/GeneralUPM-ABS/seed0",
+      "miniImageNet/cluster/bag64/GeneralUPM-ABS/seed1",
+      "miniImageNet/cluster/bag64/GeneralUPM-ABS/seed2"
+    ],
+    "average": 3.4366666666666665,
+    "rank": 9
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "GeneralUPM-ABS",
+    "bag": 128,
+    "best_mean": 2.1933333333333334,
+    "best_sample_std": 0.07023769168568475,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag128/GeneralUPM-ABS/seed0",
+      "miniImageNet/cluster/bag128/GeneralUPM-ABS/seed1",
+      "miniImageNet/cluster/bag128/GeneralUPM-ABS/seed2"
+    ],
+    "average": 3.4366666666666665,
+    "rank": 9
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "FlowLLP",
+    "bag": 16,
+    "best_mean": 61.86,
+    "best_sample_std": 0.8842510955605342,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag16/FlowLLP/seed0",
+      "miniImageNet/cluster/bag16/FlowLLP/seed1",
+      "miniImageNet/cluster/bag16/FlowLLP/seed2"
+    ],
+    "average": 44.134166666666665,
+    "rank": 6
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "FlowLLP",
+    "bag": 32,
+    "best_mean": 51.56,
+    "best_sample_std": 0.43034869582700364,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag32/FlowLLP/seed0",
+      "miniImageNet/cluster/bag32/FlowLLP/seed1",
+      "miniImageNet/cluster/bag32/FlowLLP/seed2"
+    ],
+    "average": 44.134166666666665,
+    "rank": 6
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "FlowLLP",
+    "bag": 64,
+    "best_mean": 37.443333333333335,
+    "best_sample_std": 0.4532475409015885,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag64/FlowLLP/seed0",
+      "miniImageNet/cluster/bag64/FlowLLP/seed1",
+      "miniImageNet/cluster/bag64/FlowLLP/seed2"
+    ],
+    "average": 44.134166666666665,
+    "rank": 6
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "FlowLLP",
+    "bag": 128,
+    "best_mean": 25.673333333333336,
+    "best_sample_std": 0.5337914698956258,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag128/FlowLLP/seed0",
+      "miniImageNet/cluster/bag128/FlowLLP/seed1",
+      "miniImageNet/cluster/bag128/FlowLLP/seed2"
+    ],
+    "average": 44.134166666666665,
+    "rank": 6
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "LLP-MM",
+    "bag": 16,
+    "best_mean": 66.99333333333334,
+    "best_sample_std": 0.6757465007925229,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag16/LLP-MM/seed0",
+      "miniImageNet/cluster/bag16/LLP-MM/seed1",
+      "miniImageNet/cluster/bag16/LLP-MM/seed2"
+    ],
+    "average": 50.2275,
+    "rank": 1
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "LLP-MM",
+    "bag": 32,
+    "best_mean": 59.64666666666666,
+    "best_sample_std": 0.9655223111525352,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag32/LLP-MM/seed1",
+      "miniImageNet/cluster/bag32/LLP-MM/seed0",
+      "miniImageNet/cluster/bag32/LLP-MM/seed2"
+    ],
+    "average": 50.2275,
+    "rank": 1
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "LLP-MM",
+    "bag": 64,
+    "best_mean": 45.913333333333334,
+    "best_sample_std": 1.6280151514446484,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag64/LLP-MM/seed1",
+      "miniImageNet/cluster/bag64/LLP-MM/seed0",
+      "miniImageNet/cluster/bag64/LLP-MM/seed2"
+    ],
+    "average": 50.2275,
+    "rank": 1
+  },
+  {
+    "dataset": "miniImageNet",
+    "method": "LLP-MM",
+    "bag": 128,
+    "best_mean": 28.356666666666666,
+    "best_sample_std": 0.7059981114233493,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "miniImageNet/cluster/bag128/LLP-MM/seed0",
+      "miniImageNet/cluster/bag128/LLP-MM/seed2",
+      "miniImageNet/cluster/bag128/LLP-MM/seed1"
+    ],
+    "average": 50.2275,
+    "rank": 1
+  }
+]

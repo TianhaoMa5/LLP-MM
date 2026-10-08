@@ -1,0 +1,706 @@
+[
+  {
+    "dataset": "CIFAR10",
+    "method": "PM",
+    "bag": 16,
+    "best_mean": 93.31333333333333,
+    "best_sample_std": 0.1850225211517078,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag16/PM/seed0",
+      "CIFAR10/cluster/bag16/PM/seed1",
+      "CIFAR10/cluster/bag16/PM/seed2"
+    ],
+    "average": 85.96083333333334,
+    "rank": 2
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "PM",
+    "bag": 32,
+    "best_mean": 91.29333333333334,
+    "best_sample_std": 0.1069267662156336,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag32/PM/seed0",
+      "CIFAR10/cluster/bag32/PM/seed1",
+      "CIFAR10/cluster/bag32/PM/seed2"
+    ],
+    "average": 85.96083333333334,
+    "rank": 2
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "PM",
+    "bag": 64,
+    "best_mean": 86.29666666666667,
+    "best_sample_std": 0.4508140784551177,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag64/PM/seed0",
+      "CIFAR10/cluster/bag64/PM/seed1",
+      "CIFAR10/cluster/bag64/PM/seed2"
+    ],
+    "average": 85.96083333333334,
+    "rank": 2
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "PM",
+    "bag": 128,
+    "best_mean": 72.94,
+    "best_sample_std": 1.6364290390970229,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag128/PM/seed0",
+      "CIFAR10/cluster/bag128/PM/seed1",
+      "CIFAR10/cluster/bag128/PM/seed2"
+    ],
+    "average": 85.96083333333334,
+    "rank": 2
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "DSQ",
+    "bag": 16,
+    "best_mean": 93.62333333333333,
+    "best_sample_std": 0.188237438713275,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag16/DSQ/seed0",
+      "CIFAR10/cluster/bag16/DSQ/seed1",
+      "CIFAR10/cluster/bag16/DSQ/seed2"
+    ],
+    "average": 84.36666666666666,
+    "rank": 4
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "DSQ",
+    "bag": 32,
+    "best_mean": 91.97333333333333,
+    "best_sample_std": 0.43558389930451774,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag32/DSQ/seed0",
+      "CIFAR10/cluster/bag32/DSQ/seed1",
+      "CIFAR10/cluster/bag32/DSQ/seed2"
+    ],
+    "average": 84.36666666666666,
+    "rank": 4
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "DSQ",
+    "bag": 64,
+    "best_mean": 87.22333333333333,
+    "best_sample_std": 0.5315386470740714,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag64/DSQ/seed0",
+      "CIFAR10/cluster/bag64/DSQ/seed1",
+      "CIFAR10/cluster/bag64/DSQ/seed2"
+    ],
+    "average": 84.36666666666666,
+    "rank": 4
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "DSQ",
+    "bag": 128,
+    "best_mean": 64.64666666666666,
+    "best_sample_std": 2.5564493606041414,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag128/DSQ/seed0",
+      "CIFAR10/cluster/bag128/DSQ/seed1",
+      "CIFAR10/cluster/bag128/DSQ/seed2"
+    ],
+    "average": 84.36666666666666,
+    "rank": 4
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "LLP-PVC",
+    "bag": 16,
+    "best_mean": 92.30333333333334,
+    "best_sample_std": 0.055075705472860385,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag16/LLP-PVC/seed0",
+      "CIFAR10/cluster/bag16/LLP-PVC/seed1",
+      "CIFAR10/cluster/bag16/LLP-PVC/seed2"
+    ],
+    "average": 83.03583333333333,
+    "rank": 6
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "LLP-PVC",
+    "bag": 32,
+    "best_mean": 90.46000000000001,
+    "best_sample_std": 0.23515952032609638,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag32/LLP-PVC/seed0",
+      "CIFAR10/cluster/bag32/LLP-PVC/seed1",
+      "CIFAR10/cluster/bag32/LLP-PVC/seed2"
+    ],
+    "average": 83.03583333333333,
+    "rank": 6
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "LLP-PVC",
+    "bag": 64,
+    "best_mean": 85.28666666666666,
+    "best_sample_std": 0.6871923554095553,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag64/LLP-PVC/seed0",
+      "CIFAR10/cluster/bag64/LLP-PVC/seed1",
+      "CIFAR10/cluster/bag64/LLP-PVC/seed2"
+    ],
+    "average": 83.03583333333333,
+    "rank": 6
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "LLP-PVC",
+    "bag": 128,
+    "best_mean": 64.09333333333333,
+    "best_sample_std": 2.0583083669201083,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag128/LLP-PVC/seed0",
+      "CIFAR10/cluster/bag128/LLP-PVC/seed1",
+      "CIFAR10/cluster/bag128/LLP-PVC/seed2"
+    ],
+    "average": 83.03583333333333,
+    "rank": 6
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "LLP-FC",
+    "bag": 16,
+    "best_mean": 56.22,
+    "best_sample_std": 1.465639792036225,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag16/LLP-FC/seed0",
+      "CIFAR10/cluster/bag16/LLP-FC/seed1",
+      "CIFAR10/cluster/bag16/LLP-FC/seed2"
+    ],
+    "average": 50.66166666666667,
+    "rank": 7
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "LLP-FC",
+    "bag": 32,
+    "best_mean": 39.49,
+    "best_sample_std": 0.6850547423381567,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag32/LLP-FC/seed0",
+      "CIFAR10/cluster/bag32/LLP-FC/seed1",
+      "CIFAR10/cluster/bag32/LLP-FC/seed2"
+    ],
+    "average": 50.66166666666667,
+    "rank": 7
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "LLP-FC",
+    "bag": 64,
+    "best_mean": 34.28666666666667,
+    "best_sample_std": 0.18717193521821718,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag64/LLP-FC/seed1",
+      "CIFAR10/cluster/bag64/LLP-FC/seed2",
+      "CIFAR10/cluster/bag64/LLP-FC/seed0"
+    ],
+    "average": 50.66166666666667,
+    "rank": 7
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "LLP-FC",
+    "bag": 128,
+    "best_mean": 72.65,
+    "best_sample_std": 1.0358088626768864,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag128/LLP-FC/seed0",
+      "CIFAR10/cluster/bag128/LLP-FC/seed1",
+      "CIFAR10/cluster/bag128/LLP-FC/seed2"
+    ],
+    "average": 50.66166666666667,
+    "rank": 7
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "ROT",
+    "bag": 16,
+    "best_mean": 93.52666666666667,
+    "best_sample_std": 0.07023769168569186,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag16/ROT/seed0",
+      "CIFAR10/cluster/bag16/ROT/seed1",
+      "CIFAR10/cluster/bag16/ROT/seed2"
+    ],
+    "average": 83.17083333333333,
+    "rank": 5
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "ROT",
+    "bag": 32,
+    "best_mean": 92.05,
+    "best_sample_std": 0.09539392014169346,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag32/ROT/seed0",
+      "CIFAR10/cluster/bag32/ROT/seed1",
+      "CIFAR10/cluster/bag32/ROT/seed2"
+    ],
+    "average": 83.17083333333333,
+    "rank": 5
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "ROT",
+    "bag": 64,
+    "best_mean": 87.14333333333333,
+    "best_sample_std": 0.15044378795195548,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag64/ROT/seed0",
+      "CIFAR10/cluster/bag64/ROT/seed1",
+      "CIFAR10/cluster/bag64/ROT/seed2"
+    ],
+    "average": 83.17083333333333,
+    "rank": 5
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "ROT",
+    "bag": 128,
+    "best_mean": 59.96333333333334,
+    "best_sample_std": 2.2074948093559263,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag128/ROT/seed0",
+      "CIFAR10/cluster/bag128/ROT/seed1",
+      "CIFAR10/cluster/bag128/ROT/seed2"
+    ],
+    "average": 83.17083333333333,
+    "rank": 5
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "EasyLLP",
+    "bag": 16,
+    "best_mean": 10.896666666666667,
+    "best_sample_std": 1.2512527056247809,
+    "normal_n": 0,
+    "divergence_n": 3,
+    "runs": [
+      "CIFAR10/cluster/bag16/EasyLLP/seed0",
+      "CIFAR10/cluster/bag16/EasyLLP/seed1",
+      "CIFAR10/cluster/bag16/EasyLLP/seed2"
+    ],
+    "average": 10.860833333333332,
+    "rank": 10
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "EasyLLP",
+    "bag": 32,
+    "best_mean": 10.9,
+    "best_sample_std": 1.2552688954961002,
+    "normal_n": 0,
+    "divergence_n": 3,
+    "runs": [
+      "CIFAR10/cluster/bag32/EasyLLP/seed0",
+      "CIFAR10/cluster/bag32/EasyLLP/seed1",
+      "CIFAR10/cluster/bag32/EasyLLP/seed2"
+    ],
+    "average": 10.860833333333332,
+    "rank": 10
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "EasyLLP",
+    "bag": 64,
+    "best_mean": 10.87,
+    "best_sample_std": 1.1981652640600133,
+    "normal_n": 0,
+    "divergence_n": 3,
+    "runs": [
+      "CIFAR10/cluster/bag64/EasyLLP/seed0",
+      "CIFAR10/cluster/bag64/EasyLLP/seed1",
+      "CIFAR10/cluster/bag64/EasyLLP/seed2"
+    ],
+    "average": 10.860833333333332,
+    "rank": 10
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "EasyLLP",
+    "bag": 128,
+    "best_mean": 10.776666666666666,
+    "best_sample_std": 1.1551767541520794,
+    "normal_n": 0,
+    "divergence_n": 3,
+    "runs": [
+      "CIFAR10/cluster/bag128/EasyLLP/seed0",
+      "CIFAR10/cluster/bag128/EasyLLP/seed1",
+      "CIFAR10/cluster/bag128/EasyLLP/seed2"
+    ],
+    "average": 10.860833333333332,
+    "rank": 10
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "EasyLLP-ABS",
+    "bag": 16,
+    "best_mean": 32.473333333333336,
+    "best_sample_std": 1.3078353617077851,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag16/EasyLLP-ABS/seed0",
+      "CIFAR10/cluster/bag16/EasyLLP-ABS/seed1",
+      "CIFAR10/cluster/bag16/EasyLLP-ABS/seed2"
+    ],
+    "average": 25.755000000000003,
+    "rank": 8
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "EasyLLP-ABS",
+    "bag": 32,
+    "best_mean": 26.933333333333334,
+    "best_sample_std": 1.304964878199152,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag32/EasyLLP-ABS/seed0",
+      "CIFAR10/cluster/bag32/EasyLLP-ABS/seed1",
+      "CIFAR10/cluster/bag32/EasyLLP-ABS/seed2"
+    ],
+    "average": 25.755000000000003,
+    "rank": 8
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "EasyLLP-ABS",
+    "bag": 64,
+    "best_mean": 23.883333333333333,
+    "best_sample_std": 0.3455912807542097,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag64/EasyLLP-ABS/seed0",
+      "CIFAR10/cluster/bag64/EasyLLP-ABS/seed1",
+      "CIFAR10/cluster/bag64/EasyLLP-ABS/seed2"
+    ],
+    "average": 25.755000000000003,
+    "rank": 8
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "EasyLLP-ABS",
+    "bag": 128,
+    "best_mean": 19.73,
+    "best_sample_std": 1.646845469374707,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag128/EasyLLP-ABS/seed0",
+      "CIFAR10/cluster/bag128/EasyLLP-ABS/seed1",
+      "CIFAR10/cluster/bag128/EasyLLP-ABS/seed2"
+    ],
+    "average": 25.755000000000003,
+    "rank": 8
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "GeneralUPM",
+    "bag": 16,
+    "best_mean": 10.896666666666667,
+    "best_sample_std": 1.2512527056247809,
+    "normal_n": 0,
+    "divergence_n": 3,
+    "runs": [
+      "CIFAR10/cluster/bag16/GeneralUPM/seed0",
+      "CIFAR10/cluster/bag16/GeneralUPM/seed1",
+      "CIFAR10/cluster/bag16/GeneralUPM/seed2"
+    ],
+    "average": 10.860833333333332,
+    "rank": 10
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "GeneralUPM",
+    "bag": 32,
+    "best_mean": 10.9,
+    "best_sample_std": 1.2552688954961002,
+    "normal_n": 0,
+    "divergence_n": 3,
+    "runs": [
+      "CIFAR10/cluster/bag32/GeneralUPM/seed0",
+      "CIFAR10/cluster/bag32/GeneralUPM/seed1",
+      "CIFAR10/cluster/bag32/GeneralUPM/seed2"
+    ],
+    "average": 10.860833333333332,
+    "rank": 10
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "GeneralUPM",
+    "bag": 64,
+    "best_mean": 10.87,
+    "best_sample_std": 1.1981652640600133,
+    "normal_n": 0,
+    "divergence_n": 3,
+    "runs": [
+      "CIFAR10/cluster/bag64/GeneralUPM/seed0",
+      "CIFAR10/cluster/bag64/GeneralUPM/seed1",
+      "CIFAR10/cluster/bag64/GeneralUPM/seed2"
+    ],
+    "average": 10.860833333333332,
+    "rank": 10
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "GeneralUPM",
+    "bag": 128,
+    "best_mean": 10.776666666666666,
+    "best_sample_std": 1.1551767541520794,
+    "normal_n": 0,
+    "divergence_n": 3,
+    "runs": [
+      "CIFAR10/cluster/bag128/GeneralUPM/seed0",
+      "CIFAR10/cluster/bag128/GeneralUPM/seed1",
+      "CIFAR10/cluster/bag128/GeneralUPM/seed2"
+    ],
+    "average": 10.860833333333332,
+    "rank": 10
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "GeneralUPM-ABS",
+    "bag": 16,
+    "best_mean": 32.473333333333336,
+    "best_sample_std": 1.3078353617077851,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag16/GeneralUPM-ABS/seed0",
+      "CIFAR10/cluster/bag16/GeneralUPM-ABS/seed1",
+      "CIFAR10/cluster/bag16/GeneralUPM-ABS/seed2"
+    ],
+    "average": 25.495833333333334,
+    "rank": 9
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "GeneralUPM-ABS",
+    "bag": 32,
+    "best_mean": 26.933333333333334,
+    "best_sample_std": 1.304964878199152,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag32/GeneralUPM-ABS/seed0",
+      "CIFAR10/cluster/bag32/GeneralUPM-ABS/seed1",
+      "CIFAR10/cluster/bag32/GeneralUPM-ABS/seed2"
+    ],
+    "average": 25.495833333333334,
+    "rank": 9
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "GeneralUPM-ABS",
+    "bag": 64,
+    "best_mean": 22.326666666666668,
+    "best_sample_std": 1.8434297744512365,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag64/GeneralUPM-ABS/seed0",
+      "CIFAR10/cluster/bag64/GeneralUPM-ABS/seed1",
+      "CIFAR10/cluster/bag64/GeneralUPM-ABS/seed2"
+    ],
+    "average": 25.495833333333334,
+    "rank": 9
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "GeneralUPM-ABS",
+    "bag": 128,
+    "best_mean": 20.25,
+    "best_sample_std": 1.3260467563400615,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag128/GeneralUPM-ABS/seed0",
+      "CIFAR10/cluster/bag128/GeneralUPM-ABS/seed1",
+      "CIFAR10/cluster/bag128/GeneralUPM-ABS/seed2"
+    ],
+    "average": 25.495833333333334,
+    "rank": 9
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "FlowLLP",
+    "bag": 16,
+    "best_mean": 93.16,
+    "best_sample_std": 0.16370705543745984,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag16/FlowLLP/seed0",
+      "CIFAR10/cluster/bag16/FlowLLP/seed1",
+      "CIFAR10/cluster/bag16/FlowLLP/seed2"
+    ],
+    "average": 84.47083333333333,
+    "rank": 3
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "FlowLLP",
+    "bag": 32,
+    "best_mean": 91.20333333333333,
+    "best_sample_std": 0.1686218649325564,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag32/FlowLLP/seed0",
+      "CIFAR10/cluster/bag32/FlowLLP/seed2",
+      "CIFAR10/cluster/bag32/FlowLLP/seed1"
+    ],
+    "average": 84.47083333333333,
+    "rank": 3
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "FlowLLP",
+    "bag": 64,
+    "best_mean": 83.96000000000001,
+    "best_sample_std": 0.2816025568065727,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag64/FlowLLP/seed0",
+      "CIFAR10/cluster/bag64/FlowLLP/seed1",
+      "CIFAR10/cluster/bag64/FlowLLP/seed2"
+    ],
+    "average": 84.47083333333333,
+    "rank": 3
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "FlowLLP",
+    "bag": 128,
+    "best_mean": 69.56,
+    "best_sample_std": 1.0983168941612418,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag128/FlowLLP/seed0",
+      "CIFAR10/cluster/bag128/FlowLLP/seed1",
+      "CIFAR10/cluster/bag128/FlowLLP/seed2"
+    ],
+    "average": 84.47083333333333,
+    "rank": 3
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "LLP-MM",
+    "bag": 16,
+    "best_mean": 94.04,
+    "best_sample_std": 0.19974984355437975,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag16/LLP-MM/seed0",
+      "CIFAR10/cluster/bag16/LLP-MM/seed1",
+      "CIFAR10/cluster/bag16/LLP-MM/seed2"
+    ],
+    "average": 87.66916666666667,
+    "rank": 1
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "LLP-MM",
+    "bag": 32,
+    "best_mean": 92.33,
+    "best_sample_std": 0.10440306508910992,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag32/LLP-MM/seed0",
+      "CIFAR10/cluster/bag32/LLP-MM/seed1",
+      "CIFAR10/cluster/bag32/LLP-MM/seed2"
+    ],
+    "average": 87.66916666666667,
+    "rank": 1
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "LLP-MM",
+    "bag": 64,
+    "best_mean": 89.12,
+    "best_sample_std": 0.42508822613664565,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag64/LLP-MM/seed1",
+      "CIFAR10/cluster/bag64/LLP-MM/seed0",
+      "CIFAR10/cluster/bag64/LLP-MM/seed2"
+    ],
+    "average": 87.66916666666667,
+    "rank": 1
+  },
+  {
+    "dataset": "CIFAR10",
+    "method": "LLP-MM",
+    "bag": 128,
+    "best_mean": 75.18666666666667,
+    "best_sample_std": 2.138371654631943,
+    "normal_n": 3,
+    "divergence_n": 0,
+    "runs": [
+      "CIFAR10/cluster/bag128/LLP-MM/seed0",
+      "CIFAR10/cluster/bag128/LLP-MM/seed1",
+      "CIFAR10/cluster/bag128/LLP-MM/seed2"
+    ],
+    "average": 87.66916666666667,
+    "rank": 1
+  }
+]

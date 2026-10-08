@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-08",
+  "status": "source_release_checked",
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Darwin",
+    "architecture": "arm64",
+    "torch": "2.13.0",
+    "cuda_available": false
+  },
+  "local_tests": {
+    "passed": 303,
+    "skipped": 2,
+    "failed": 0,
+    "seconds": 9.78,
+    "skip_reasons": [
+      "CUDA unavailable",
+      "optional GeoPandas not installed"
+    ]
+  },
+  "checks": {
+    "cluster_runs": 396,
+    "cluster_normal": 330,
+    "cluster_divergence": 66,
+    "cluster_missing": 0,
+    "cluster_cells_recomputed": 132,
+    "gan_runs": 72,
+    "gan_pairs": 36,
+    "gan_cells": 24,
+    "default_image_plan_count": 1188,
+    "ku_order3_seeds": 3,
+    "ku_order5_seeds": 3,
+    "order13_bags": 4,
+    "cli_imports": true,
+    "wheel_build": true,
+    "isolated_wheel_imports": true,
+    "wheel_license_metadata": "MIT",
+    "order_figure_points": 64,
+    "unchanged_figure_input_hashes": true
+  },
+  "credential_pattern_scan": {
+    "history_objects_checked": 312,
+    "credential_pattern_findings": []
+  },
+  "wheel_sha256": "edfe2e0d8d35c1e4d371a18ae123e96db0718065c5b0f6c6a4c771a959451f43",
+  "limitations": [
+    "No new full training performed during this release review.",
+    "CUDA tests were not run locally.",
+    "Test-based checkpoint selection is retained as in the paper.",
+    "The miniImageNet cluster map is transductive, not train-only.",
+    "User-provided bag128/order2 point has no supplied raw log."
+  ],
+  "ci": "Linux workflow runs on the release commit; current status is available in GitHub Actions."
+}

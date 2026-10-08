@@ -21,4 +21,5 @@ jobs:
       - run: python -m plench.train --help
       - run: python -m reproduction.llp_gan_pytorch.train --help
       - run: python scripts/summarize_paper_evidence.py --check
+      - run: python scripts/summarize_cluster.py --check
       - run: python scripts/reproduce_paper.py --list

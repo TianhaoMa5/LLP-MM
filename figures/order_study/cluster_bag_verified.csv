@@ -1,0 +1,65 @@
+dataset,bag,order,seed,test_acc_percent,source,manifest_sha256
+CIFAR10,16,1,0,93.06,PM baseline: completed/CIFAR10/cluster/bag16/PM/seed0,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,16,2,0,93.38,mm-orders-20261006/validated_latest.json,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,16,3,0,93.67,mm-orders-20261006/validated_latest.json,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,16,4,0,93.88,mm-orders-20261006/validated_latest.json,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,16,5,0,93.84,mm-orders-20261006/validated_latest.json,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,16,6,0,93.9,mm-orders-20261006/validated_latest.json,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,16,7,0,93.78,mm-orders-20261006/validated_latest.json,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,16,8,0,93.82,completed/CIFAR10/cluster/bag16/LLP-MM/seed0,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,16,9,0,93.87,mm-orders-20261006/validated_latest.json,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,16,10,0,93.93,mm-orders-20261006/validated_latest.json,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,16,11,0,94.16,mm-orders-20261006/validated_latest.json,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,16,12,0,94.03,mm-orders-20261006/validated_latest.json,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,16,13,0,94.24,mm-orders-20261006/validated_latest.json,cadd511054dc020e4a80c5b879ccf37075e03534cc12436583be232cb4282dcf
+CIFAR10,32,1,0,91.36,PM baseline: completed/CIFAR10/cluster/bag32/PM/seed0,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,32,2,0,91.41,mm-orders-20261006/validated_latest.json,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,32,3,0,91.86,mm-orders-20261006/validated_latest.json,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,32,4,0,91.85,mm-orders-20261006/validated_latest.json,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,32,5,0,92.07,mm-orders-20261006/validated_latest.json,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,32,6,0,92.01,mm-orders-20261006/validated_latest.json,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,32,7,0,92.26,mm-orders-20261006/validated_latest.json,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,32,8,0,92.28,completed/CIFAR10/cluster/bag32/LLP-MM/seed0,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,32,9,0,92.14,mm-orders-20261006/validated_latest.json,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,32,10,0,92.34,mm-orders-20261006/validated_latest.json,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,32,11,0,92.07,mm-orders-20261006/validated_latest.json,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,32,12,0,92.13,mm-orders-20261006/validated_latest.json,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,32,13,0,91.87,mm-orders-20261006/validated_latest.json,0a7a3fe1a3720bdf2f912f88ede40b080458f548abffeca2221b36e0a968225b
+CIFAR10,64,1,0,86.41,PM baseline: completed/CIFAR10/cluster/bag64/PM/seed0,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,64,2,0,87.59,mm-orders-20261006/validated_latest.json,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,64,3,0,88.4,mm-orders-20261006/validated_latest.json,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,64,4,0,88.69,mm-orders-20261006/validated_latest.json,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,64,5,0,89.06,mm-orders-20261006/validated_latest.json,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,64,6,0,88.76,mm-orders-20261006/validated_latest.json,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,64,7,0,88.8,mm-orders-20261006/validated_latest.json,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,64,8,0,88.81,completed/CIFAR10/cluster/bag64/LLP-MM/seed0,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,64,9,0,88.85,mm-orders-20261006/validated_latest.json,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,64,10,0,88.82,mm-orders-20261006/validated_latest.json,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,64,11,0,89.09,mm-orders-20261006/validated_latest.json,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,64,12,0,89.26,mm-orders-20261006/validated_latest.json,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,64,13,0,89.05,mm-orders-20261006/validated_latest.json,4803bb6c03b0ce2a51f0c65ea30a2a09141d6ded360f00f5008c9dbdb569c3ce
+CIFAR10,128,1,0,71.33,PM baseline: completed/CIFAR10/cluster/bag128/PM/seed0,50fb11af5a4ada2d88e80b3b704ca6ef64ca0d07a842a8f5d27e9be445e7acf7
+CIFAR10,128,2,,71.91,"User-reported rerun, 2026-10-08",
+CIFAR10,128,3,0,72.59,mm-orders-20261006/validated_latest.json,50fb11af5a4ada2d88e80b3b704ca6ef64ca0d07a842a8f5d27e9be445e7acf7
+CIFAR10,128,4,0,72.89,mm-orders-20261006/validated_latest.json,50fb11af5a4ada2d88e80b3b704ca6ef64ca0d07a842a8f5d27e9be445e7acf7
+CIFAR10,128,5,0,72.9,mm-orders-20261006/validated_latest.json,50fb11af5a4ada2d88e80b3b704ca6ef64ca0d07a842a8f5d27e9be445e7acf7
+CIFAR10,128,6,0,73.04,mm-orders-20261006/validated_latest.json,50fb11af5a4ada2d88e80b3b704ca6ef64ca0d07a842a8f5d27e9be445e7acf7
+CIFAR10,128,7,0,72.24,mm-orders-20261006/validated_latest.json,50fb11af5a4ada2d88e80b3b704ca6ef64ca0d07a842a8f5d27e9be445e7acf7
+CIFAR10,128,8,0,72.73,completed/CIFAR10/cluster/bag128/LLP-MM/seed0,50fb11af5a4ada2d88e80b3b704ca6ef64ca0d07a842a8f5d27e9be445e7acf7
+CIFAR10,128,9,0,72.29,mm-orders-20261006/validated_latest.json,50fb11af5a4ada2d88e80b3b704ca6ef64ca0d07a842a8f5d27e9be445e7acf7
+CIFAR10,128,10,0,72.84,mm-orders-20261006/validated_latest.json,50fb11af5a4ada2d88e80b3b704ca6ef64ca0d07a842a8f5d27e9be445e7acf7
+CIFAR10,128,11,0,72.65,mm-orders-20261006/validated_latest.json,50fb11af5a4ada2d88e80b3b704ca6ef64ca0d07a842a8f5d27e9be445e7acf7
+CIFAR10,128,12,0,72.27,mm-orders-20261006/validated_latest.json,50fb11af5a4ada2d88e80b3b704ca6ef64ca0d07a842a8f5d27e9be445e7acf7
+CIFAR10,128,13,0,72.21,mm-orders-20261006/validated_latest.json,50fb11af5a4ada2d88e80b3b704ca6ef64ca0d07a842a8f5d27e9be445e7acf7
+CIFAR100,16,1,0,71.45,PM baseline: completed/CIFAR100/cluster/bag16/PM/seed0,659be948cd48d5828cfb93e902d36161a9a03b32c92a55a6301352b5ff2492b7
+CIFAR100,16,2,0,71.7,mm-orders-20261006/validated_latest.json,659be948cd48d5828cfb93e902d36161a9a03b32c92a55a6301352b5ff2492b7
+CIFAR100,16,3,0,71.88,completed/CIFAR100/cluster/bag16/LLP-MM/seed0,659be948cd48d5828cfb93e902d36161a9a03b32c92a55a6301352b5ff2492b7
+CIFAR100,32,1,0,65.72,PM baseline: completed/CIFAR100/cluster/bag32/PM/seed0,204baab40dedaa931e27eca38046886056548b6557b32c740f19d26a612c7814
+CIFAR100,32,2,0,67.22,mm-orders-20261006/validated_latest.json,204baab40dedaa931e27eca38046886056548b6557b32c740f19d26a612c7814
+CIFAR100,32,3,0,68.04,completed/CIFAR100/cluster/bag32/LLP-MM/seed0,204baab40dedaa931e27eca38046886056548b6557b32c740f19d26a612c7814
+CIFAR100,64,1,0,57.62,PM baseline: completed/CIFAR100/cluster/bag64/PM/seed0,f7b2afbfa0291e64d2aaa09c79b65522a59dbb0ab366930ed6b841e9cc17cdad
+CIFAR100,64,2,0,58.41,mm-orders-20261006/validated_latest.json,f7b2afbfa0291e64d2aaa09c79b65522a59dbb0ab366930ed6b841e9cc17cdad
+CIFAR100,64,3,0,58.33,completed/CIFAR100/cluster/bag64/LLP-MM/seed0,f7b2afbfa0291e64d2aaa09c79b65522a59dbb0ab366930ed6b841e9cc17cdad
+CIFAR100,128,1,0,45.37,PM baseline: completed/CIFAR100/cluster/bag128/PM/seed0,5bfa9532233b963681f041229a46b85576fc7087c41e3beb5d50153f2d284009
+CIFAR100,128,2,0,46.06,mm-orders-20261006/validated_latest.json,5bfa9532233b963681f041229a46b85576fc7087c41e3beb5d50153f2d284009
+CIFAR100,128,3,0,45.21,completed/CIFAR100/cluster/bag128/LLP-MM/seed0,5bfa9532233b963681f041229a46b85576fc7087c41e3beb5d50153f2d284009

@@ -1,5 +1,7 @@
 # Paper coverage and evidence
 
+> Historical 2026-10-05 audit. See [CURRENT_RESULTS.md](CURRENT_RESULTS.md) for the completed corrected Cluster grid and updated order figure; its completion counts supersede the earlier Cluster gaps below. Other historical provenance limitations remain.
+
 **This release does not yet establish complete reproduction of every reported experiment.** It contains implementations and partial archived evidence. Recomputing an archived mean is different from reproducing training on a clean machine. The unresolved items below must remain visible when describing the release.
 
 Audit date: 2026-10-05. The audited paper is *Rethinking Learning from Label Proportions via Moment Matching*, using the `gan-maintext-20261005/updated` source snapshot and its `main.tex` entry point. The original workspace-root manuscript was older: in particular, it used CIFAR-10 order six and omitted the later GAN study. The current paper uses **order eight** on CIFAR-10. This audit distributes no manuscript TeX or PDF files.

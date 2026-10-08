@@ -17,7 +17,9 @@ METHODS = {"PM": "PM", "DSQ": "LLP_DSQ", "LLP-PVC": "LLP_PVC", "LLP-FC": "LLP_FC
            "FlowLLP": "LLP_FlowLLP", "LLP-MM": "LLP_MM"}
 
 
-def make_config(method, seed, data_root, output_root):
+def make_config(method, seed, data_root, output_root, order=None):
+    if order is not None and (method != "LLP-MM" or order < 1):
+        raise ValueError("An order override requires LLP-MM and a positive order")
     bags_per_step = 5 if method.startswith("GeneralUPM") else 4
     hp = {"model": "ImageNetResNet18", "pretrained": True, "input_resolution": 224,
           "optimizer": "Adam", "lr": 0.001, "weight_decay": 0.0005,
@@ -25,7 +27,8 @@ def make_config(method, seed, data_root, output_root):
           "cosine_mode": "standard", "ku_activation_checkpoint": True,
           "ku_select_by_validation_macro_f1": False, "ku_test_every_checkpoint": True}
     if method == "LLP-MM":
-        hp.update(order=8, order_weights=[0.125] * 8, moment_loss_type="ce",
+        selected_order = 8 if order is None else order
+        hp.update(order=selected_order, order_weights=[1.0 / selected_order] * selected_order, moment_loss_type="ce",
                   moment_algorithm="stable_dp", moment_compute_dtype="float64",
                   moment_ce_smoothing_tau=0.0001)
     if method.startswith(("EasyLLP", "GeneralUPM")):
@@ -34,8 +37,9 @@ def make_config(method, seed, data_root, output_root):
         hp.update(flow_pretrain_fraction=0.5, flow_latent_dim=50,
                   flow_anchors_per_class=1000, flow_particle_steps=3000,
                   flow_particle_lr=0.001, flow_lambda_anchor=0.1)
+    method_dir = method if order is None else f"{method}-order{order}"
     return {"dataset": "KUOptofilPBC", "algorithm": METHODS[method],
-            "data_dir": str(data_root), "output_dir": str(output_root / method / f"seed{seed}"),
+            "data_dir": str(data_root), "output_dir": str(output_root / method_dir / f"seed{seed}"),
             "batchsize": bags_per_step, "bagsize": 32, "n_classes": 13,
             "ku_merge_validation_into_train": True, "ku_unknown_bag_max_size": 128,
             "ku_unknown_bag_seed": 0, "variable_bag_size": True, "natural_bags": False,
@@ -67,12 +71,15 @@ def main():
     p.add_argument("--output-root", type=Path, default=ROOT / "outputs/ku")
     p.add_argument("--method", choices=METHODS)
     p.add_argument("--seed", type=int, choices=(0, 1, 2))
+    p.add_argument("--order", type=int, help="LLP-MM order ablation, e.g. 3 or 5; omit for paper order 8")
     p.add_argument("--run", action="store_true")
     p.add_argument("--json", action="store_true")
     args = p.parse_args()
+    if args.order is not None and (args.method != "LLP-MM" or args.order < 1):
+        p.error("--order requires --method LLP-MM and a positive order")
     args.data_root = args.data_root.expanduser().resolve()
     args.output_root = args.output_root.expanduser().resolve()
-    configs = [make_config(m, s, args.data_root, args.output_root)
+    configs = [make_config(m, s, args.data_root, args.output_root, order=args.order)
                for m, s in itertools.product([args.method] if args.method else METHODS,
                                              [args.seed] if args.seed is not None else (0, 1, 2))]
     if args.json:

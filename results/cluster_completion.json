@@ -1,0 +1,34 @@
+{
+  "completed_at": "2026-10-08T12:26:01.750856+09:00",
+  "total_configs": 396,
+  "normal_validated": 330,
+  "divergence_validated": 66,
+  "missing": 0,
+  "running": 0,
+  "normal_accuracy_metric": "final test accuracy at500epochs; divergent runs excluded",
+  "datasets": {
+    "CIFAR10": {
+      "normal": 108,
+      "divergence": 24
+    },
+    "CIFAR100": {
+      "normal": 108,
+      "divergence": 24
+    },
+    "miniImageNet": {
+      "normal": 114,
+      "divergence": 18
+    }
+  },
+  "original_infrastructure_failure_preserved": {
+    "index": 61,
+    "recovery_verified": true,
+    "final_test_acc": 0.9132
+  },
+  "divergence_step_precision": {
+    "exact": 64,
+    "checkpoint_only": 2
+  },
+  "additional_order_and_KU_experiments_excluded": true,
+  "paper_accuracy_metric": "maximum finite logged test accuracy per run; include pre-divergence maxima with outcome retained"
+}

@@ -1,13 +1,14 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "llp-mm"
-version = "0.2.0.dev0"
-description = "Moment matching for learning from label proportions: research reproduction candidate"
+version = "0.2.0"
+description = "Moment matching for learning from label proportions"
 requires-python = ">=3.11"
-license-files = ["third_party/licenses/*.txt"]
+license = "MIT"
+license-files = ["LICENSE", "third_party/licenses/*.txt"]
 dynamic = ["dependencies"]
 
 [tool.setuptools.dynamic]
@@ -18,6 +19,9 @@ where = [".", "src"]
 include = ["plench*", "reproduction*", "mo_matching*"]
 exclude = ["plench.tests*", "tests*", "src*", "reproduction.upstream*"]
 namespaces = true
+
+[project.optional-dependencies]
+plot = ["matplotlib>=3.7"]
 
 [tool.setuptools.package-data]
 plench = ["configs/**/*.json", "data_dir/cluster_maps/*.npz"]

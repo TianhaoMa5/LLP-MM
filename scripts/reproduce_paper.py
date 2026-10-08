@@ -47,6 +47,7 @@ def build_plan(
     output_root: Path = REPO_ROOT / "outputs" / "paper",
     python: str = sys.executable,
     num_workers: int = 4,
+    order: int | None = None,
 ) -> list[dict[str, Any]]:
     protocol = load_protocol() if protocol is None else protocol
     if num_workers < 0:
@@ -58,6 +59,8 @@ def build_plan(
         _selected(methods, list(protocol["methods"]), "method"),
         _selected(seeds, protocol["seeds"], "seed"),
     )
+    if order is not None and (axes[3] != ["LLP-MM"] or not 1 <= order <= 13):
+        raise ValueError("An order override requires only LLP-MM and an order from 1 to 13")
     data_root = Path(data_root).expanduser().resolve()
     output_root = Path(output_root).expanduser().resolve()
     training = protocol["training"]
@@ -74,9 +77,10 @@ def build_plan(
             **method_spec.get("hparams", {}),
         }
         if method == "LLP-MM":
-            order = dataset_spec["moment_order"]
-            hparams.update(order=order, order_weights=[1.0 / order] * order)
-        run_id = f"{dataset}/{mode}/bag{size}/{method}/seed{seed}"
+            selected_order = dataset_spec["moment_order"] if order is None else order
+            hparams.update(order=selected_order, order_weights=[1.0 / selected_order] * selected_order)
+        method_dir = method if order is None else f"{method}-order{order}"
+        run_id = f"{dataset}/{mode}/bag{size}/{method_dir}/seed{seed}"
         output_dir = output_root / run_id
         command = [
             str(python), "-m", "plench.train",
@@ -168,6 +172,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--bag-mode", nargs="+", choices=list(protocol["bag_modes"]))
     parser.add_argument("--bag-size", nargs="+", type=int, choices=protocol["bag_sizes"])
     parser.add_argument("--seed", nargs="+", type=int, choices=protocol["seeds"])
+    parser.add_argument("--order", type=int, choices=range(1, 14), help="LLP-MM order ablation; use PM for the figure's order-one point")
     parser.add_argument("--data-root", type=Path, default=REPO_ROOT / "data",
                         help="Shared dataset directory used by the PLeNCH loaders")
     parser.add_argument("--output-root", type=Path, default=REPO_ROOT / "outputs" / "paper")
@@ -184,6 +189,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             datasets=args.dataset, methods=args.method, bag_modes=args.bag_mode,
             bag_sizes=args.bag_size, seeds=args.seed, data_root=args.data_root,
             output_root=args.output_root, python=args.python, num_workers=args.num_workers,
+            order=args.order,
         )
         print(
             f"Selected {len(runs)} runs. Reconstructed paper protocol; historical numerical "

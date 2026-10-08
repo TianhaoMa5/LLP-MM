@@ -1,0 +1,11 @@
+[
+  {
+    "dataset": "CIFAR10",
+    "bag": 128,
+    "order": 2,
+    "test_acc_percent": 71.91,
+    "previous_test_acc_percent": 73.8,
+    "source": "User-reported rerun, 2026-10-08",
+    "raw_evidence_provided": false
+  }
+]

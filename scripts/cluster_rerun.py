@@ -41,6 +41,33 @@ def valid_result_rows(rows, expected_epochs):
     return True
 
 
+def result_status(output, returncode, expected_epochs, smoke=False):
+    """Keep numerical divergence distinct from infrastructure failure."""
+    status = {'returncode': returncode, 'finished_unix': time.time(), 'validated': False,
+              'kind': 'smoke' if smoke else 'formal', 'outcome': 'infrastructure_failure'}
+    log = output / 'results.jsonl'
+    rows = [json.loads(line) for line in log.read_text().splitlines() if line.strip()] if log.is_file() else []
+    if returncode == 0 and (output / 'done').is_file() and valid_result_rows(rows, expected_epochs):
+        best = max(rows, key=lambda row: row['test_acc'])
+        status.update(validated=True, outcome='normal', final_test_acc=rows[-1]['test_acc'],
+                      last_epoch=rows[-1]['epoch'], best_test_acc=best['test_acc'], best_step=best['step'])
+        return status
+    failure_path = output / 'numerical_failure.json'
+    if returncode != 0 and not (output / 'done').exists() and failure_path.is_file():
+        failure = json.loads(failure_path.read_text())
+        value = float(failure.get('value', '0'))
+        step = failure.get('step')
+        if (failure.get('reason') == 'nonfinite_training_loss' and failure.get('metric') == 'loss'
+                and isinstance(step, int) and step >= 0 and not math.isfinite(value)):
+            finite = [row for row in rows if math.isfinite(row.get('test_acc', float('nan')))]
+            status.update(validated=not smoke, outcome='numerical_divergence', first_nonfinite_step=step,
+                          failure_evidence='numerical_failure.json')
+            if finite:
+                best = max(finite, key=lambda row: row['test_acc'])
+                status.update(best_test_acc=best['test_acc'], best_step=best['step'])
+    return status
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--data-root', type=Path, required=True)
@@ -108,12 +135,7 @@ def main():
     (output/'execution.json').write_text(json.dumps(evidence,indent=2)+'\n')
     with (output/'train.log').open('w') as log:
         result = subprocess.run(command, cwd=REPO_ROOT, env=environment, stdout=log, stderr=subprocess.STDOUT)
-    status = {'returncode':result.returncode, 'finished_unix':time.time(), 'validated':False}
-    if result.returncode == 0 and (output/'done').is_file():
-        rows = [json.loads(line) for line in (output/'results.jsonl').read_text().splitlines() if line.strip()]
-        expected_epochs = int(command[command.index('--epochs')+1])
-        if valid_result_rows(rows, expected_epochs):
-            status.update(validated=True, final_test_acc=rows[-1]['test_acc'], last_epoch=rows[-1]['epoch'])
+    status = result_status(output, result.returncode, int(command[command.index('--epochs')+1]), args.smoke)
     (output/'status.json').write_text(json.dumps(status,indent=2)+'\n')
     print(json.dumps({'run_id':run['run_id'], **status}), flush=True)
     if not status['validated']:
