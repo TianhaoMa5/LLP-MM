@@ -1,0 +1,24 @@
+name: Core checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  dataset-free:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e '.[paper,test]'
+      - run: python -m pytest -q
+      - run: python -c "from mo_matching.llp import LLPHighOrderLoss, MulticlassFactorialMomentLoss, variable_multiclass_llp_mm_loss"
+      - run: python -m mo_matching.run --help
+      - run: python -m mo_matching.gan.train --help
+      - run: python -m mo_matching.prepare_ku --help

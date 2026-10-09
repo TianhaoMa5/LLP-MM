@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llp-mm"
+version = "0.4.0"
+description = "Moment matching for learning from label proportions"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE", "third_party/licenses/*.txt"]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["mo_matching*"]
+namespaces = false
+
+[project.optional-dependencies]
+paper = ["numpy==2.4.6", "scipy==1.17.1", "Pillow==12.3.0", "torchvision==0.28.0", "opencv-python-headless==5.0.0.93", "POT==0.9.7.post1"]
+test = ["pytest==9.1.1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra"
+
+[tool.setuptools.package-data]
+"mo_matching.data.cluster_maps" = ["*.npz"]

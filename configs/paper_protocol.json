@@ -1,0 +1,108 @@
+{
+  "datasets": [
+    "CIFAR10",
+    "CIFAR100",
+    "miniImageNet"
+  ],
+  "methods": [
+    "PM",
+    "DSQ",
+    "LLP-PVC",
+    "LLP-FC",
+    "ROT",
+    "EasyLLP",
+    "EasyLLP-ABS",
+    "GeneralUPM",
+    "GeneralUPM-ABS",
+    "FlowLLP",
+    "LLP-MM"
+  ],
+  "bag_types": [
+    "random",
+    "cluster",
+    "alphafirst"
+  ],
+  "bag_sizes": [
+    16,
+    32,
+    64,
+    128
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "epochs": 500,
+  "images_per_update": 1024,
+  "default_mm_orders": {
+    "CIFAR10": 8,
+    "CIFAR100": 3,
+    "miniImageNet": 3
+  },
+  "order_study": {
+    "CIFAR10": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "CIFAR100": [
+      1,
+      2,
+      3
+    ],
+    "seed": 0,
+    "order1_method": "PM"
+  },
+  "ku": {
+    "dataset": "KUOptofilPBC",
+    "epochs": 100,
+    "bags_per_update": 4,
+    "bags_per_update_overrides": {
+      "GeneralUPM": 5,
+      "GeneralUPM-ABS": 5
+    },
+    "mm_orders": [
+      3,
+      5,
+      8
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "unknown_bag_limit": 128,
+    "unknown_shuffle_seed": 0,
+    "selection": "test_macro_f1",
+    "std_ddof": 0
+  },
+  "gan": {
+    "dataset": "CIFAR10",
+    "methods": [
+      "LLP-GAN",
+      "MM+GAN"
+    ],
+    "shared_manifest_required": true,
+    "epochs": 500,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "selection": "maximum_recorded_finite_test_accuracy",
+    "std_ddof": 1
+  },
+  "image_selection": "maximum_recorded_finite_test_accuracy",
+  "image_std_ddof": 1
+}
